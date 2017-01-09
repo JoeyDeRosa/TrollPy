@@ -18,10 +18,11 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'ipython',
-    'pyramid_ipython'
+    'pyramid_ipython',
     'psycopg2',
     'passlib',
     'pyalexa-skill',
+    'pygame',
     ]
 
 tests_require = [
