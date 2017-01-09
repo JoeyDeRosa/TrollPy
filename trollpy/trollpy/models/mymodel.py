@@ -2,17 +2,25 @@ from sqlalchemy import (
     Column,
     Index,
     Integer,
-    Text,
+    Unicode,
 )
 
 from .meta import Base
+from passlib.apps import custom_app_context as pwd_context
 
 
-class MyModel(Base):
-    __tablename__ = 'models'
+class User(Base):
+    __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    name = Column(Text)
-    value = Column(Integer)
+    username = Column(Unicode)
+    password = Column(Unicode)
+    first_name = Column(Unicode)
+    last_name = Column(Unicode)
+    email = Column(Unicode)
 
-
-Index('my_index', MyModel.name, unique=True, mysql_length=255)
+    def __init__(self, **kwargs):
+        self.username = kwargs['username']
+        self.password = pwd_context.hash(kwargs['password'])
+        self.first_name = kwargs['first_name']
+        self.last_name = kwargs['last_name']
+        self.email = kwargs['email']
