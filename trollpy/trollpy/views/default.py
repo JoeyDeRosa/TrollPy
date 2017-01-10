@@ -17,8 +17,10 @@ def registration_view(request):
         if request.POST["username"] and len(request.POST["username"].split()) > 1:
             new_name = request.POST["username"].split()
             new_name = '_'.join(new_name)
+        else:
+            new_name = request.POST["username"]
         new_user = User(
-            username=new_name,
+            username=new_name or request.POST["username"],
             password=request.POST["password"],
             first_name=request.POST["first_name"],
             last_name=request.POST["last_name"],
