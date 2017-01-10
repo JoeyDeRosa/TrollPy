@@ -72,18 +72,11 @@ from ChessGameParams import TkinterGameSetupParams
 
 from optparse import OptionParser
 import time
-import os
-
-from trollpy import models
-from sqlalchemy.orm import sessionmaker
+import random
+import requests
 
 
-engine = models.get_engine(registry.settings)
-Session = sessionmaker(bind=engine)
-session = Session()
-
-shit_talk = session.query(models.KillScore).all()
-
+shit_talk_json = requests.get('http://localhost:6547/smack_api').json()
 
 piece_lvl = {
     'k': 9,
@@ -184,9 +177,16 @@ class PythonChessMain:
 
             # Code for alexa say phrase, when user losses piece goes here
             move_report_split = moveReport.split()
-            if 'captures' in move_report_split and move_report_split[0] == 'White':
+            if 'captures' in move_report_split and move_report_split[0] == 'Black':
                 lvl = piece_lvl[move_report_split[1][0]] - piece_lvl[move_report_split[6][0]]
-                print(shit_talk[lvl])
+                shit_talk = []
+                for smack in shit_talk_json:
+                    if smack['killscore_id'] == str(lvl):
+                        shit_talk.append(smack['statment'])
+                if shit_talk:
+                    print(random.choice(shit_talk))
+                else:
+                    print('Default Smack Talk!')
 
             self.Gui.PrintMessage(moveReport)
             currentPlayerIndex = (currentPlayerIndex+1)%2 #this will cause the currentPlayerIndex to toggle between 1 and 0
