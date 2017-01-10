@@ -21,7 +21,6 @@ requires = [
     'pyramid_ipython',
     'psycopg2',
     'passlib',
-    'pyalexa-skill',
     'pygame',
     ]
 

@@ -74,15 +74,15 @@ from optparse import OptionParser
 import time
 import os
 
-from trollpy import models
-from sqlalchemy.orm import sessionmaker
+# from ..trollpy import models
+# from sqlalchemy.orm import sessionmaker
 
 
-engine = models.get_engine(registry.settings)
-Session = sessionmaker(bind=engine)
-session = Session()
+# engine = models.get_engine(registry.settings)
+# Session = sessionmaker(bind=engine)
+# session = Session()
 
-shit_talk = session.query(models.KillScore).all()
+# shit_talk = session.query(models.KillScore).all()
 
 
 piece_lvl = {

@@ -75,3 +75,23 @@ def smack_json(request):
     smack_dict = request.dbsession.query(KillScore).all()
     output = [item.to_json() for item in smack_dict]
     return output
+
+
+# @view_config(route_name='chess_game')
+# def chess_game(request):
+#     from ..PythonChess import PythonChessMain
+#     parser = PythonChessMain.OptionParser()
+#     parser.add_option("-d", dest="debug",
+#                   action="store_true", default=False, help="Enable debug mode (different starting board configuration)")
+#     parser.add_option("-t", dest="text",
+#                   action="store_true", default=False, help="Use text-based GUI")
+#     parser.add_option("-o", dest="old",
+#                   action="store_true", default=False, help="Use old graphics in pygame GUI")
+#     parser.add_option("-p", dest="pauseSeconds", metavar="SECONDS",
+#                   action="store", default=0, help="Sets time to pause between moves in AI vs. AI games (default = 0)")
+
+
+#     (options,args) = parser.parse_args()
+#     game = PythonChessMain.PythonChessMain(options)
+#     game.SetUp(options)
+#     game.MainLoop()
