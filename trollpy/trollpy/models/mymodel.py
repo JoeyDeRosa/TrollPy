@@ -24,3 +24,14 @@ class User(Base):
         self.first_name = kwargs['first_name']
         self.last_name = kwargs['last_name']
         self.email = kwargs['email']
+
+
+class KillScore(Base):
+    __tablename__ = 'killscore'
+    id = Column(Integer, primary_key=True)
+    killscore_id = Column(Integer)
+    statement = Column(Unicode)
+
+    def __init__(self, **kwargs):
+        self.killscore_id = kwargs['killscore_id']
+        self.statement = kwargs['statement']
