@@ -1,33 +1,57 @@
-from pyramid.response import Response
 from pyramid.view import view_config
-
-from sqlalchemy.exc import DBAPIError
-
-from ..models import MyModel
-
-
-@view_config(route_name='home', renderer='../templates/mytemplate.jinja2')
-def my_view(request):
-    try:
-        query = request.dbsession.query(MyModel)
-        one = query.filter(MyModel.name == 'one').first()
-    except DBAPIError:
-        return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'one': one, 'project': 'trollpy'}
+from pyramid.httpexceptions import HTTPFound
+from pyramid.security import remember, forget
+from ..models import User
+from ..security import check_credentials
 
 
-db_err_msg = """\
-Pyramid is having a problem using your SQL database.  The problem
-might be caused by one of the following things:
 
-1.  You may need to run the "initialize_trollpy_db" script
-    to initialize your database tables.  Check your virtual
-    environment's "bin" directory for this script and try to run it.
+@view_config(route_name='home', renderer='../templates/home.jinja2')
+def home_view(request):
+    # import pdb; pdb.set_trace()
+    return {}
 
-2.  Your database server may not be running.  Check that the
-    database server referred to by the "sqlalchemy.url" setting in
-    your "development.ini" file is running.
 
-After you fix the problem, please restart the Pyramid application to
-try it again.
-"""
+@view_config(route_name='registration', renderer='../templates/registration.jinja2')
+def registration_view(request):
+    if request.method == "POST" and request.POST:
+        if request.POST["username"] and len(request.POST["username"].split()) > 1:
+            new_name = request.POST["username"].split()
+            new_name = '_'.join(new_name)
+        new_user = User(
+            username=new_name,
+            password=request.POST["password"],
+            first_name=request.POST["first_name"],
+            last_name=request.POST["last_name"],
+            email=request.POST["email"]
+        )
+        request.dbsession.add(new_user)
+        return HTTPFound(request.route_url('home'))
+    return {}
+
+
+@view_config(route_name='login', renderer='../templates/login.jinja2')
+def login_view(request):
+    if request.method == "POST" and request.POST:
+        if request.POST["username"] and len(request.POST["username"].split()) > 1:
+            new_name = request.POST["username"].split()
+            new_name = '_'.join(new_name)
+            request.POST["username"] = new_name
+        if check_credentials(request):
+            auth_head = remember(request, request.POST["username"])
+            return HTTPFound(request.route_url('home'), headers=auth_head)
+    return {}
+
+
+@view_config(route_name='logout')
+def logout_view(request):
+    empty_head = forget(request)
+    return HTTPFound(request.route_url('home'), headers=empty_head)
+
+
+@view_config(route_name='profile', renderer='../templates/profile.jinja2')
+def profile_view(request):
+    theuserid = request.matchdict['userid']
+    the_user = request.dbsession.query(User).filter_by(username=theuserid).first()
+    # import pdb; pdb.set_trace()
+    return {"user": the_user}

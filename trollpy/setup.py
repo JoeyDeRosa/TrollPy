@@ -57,6 +57,6 @@ setup(name='trollpy',
       [paste.app_factory]
       main = trollpy:main
       [console_scripts]
-      initialize_trollpy_db = trollpy.scripts.initializedb:main
+      initialize_db = trollpy.scripts.initializedb:main
       """,
       )
