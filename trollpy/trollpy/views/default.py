@@ -71,7 +71,7 @@ def add_smack(request):
 
 
 @view_config(route_name='api_smack', renderer='json')
-def add_smack_json(request):
+def smack_json(request):
     smack_dict = request.dbsession.query(KillScore).all()
     output = [item.to_json() for item in smack_dict]
     return output

@@ -72,27 +72,17 @@ from ChessGameParams import TkinterGameSetupParams
 
 from optparse import OptionParser
 import time
+import os
+
+from trollpy import models
+from sqlalchemy.orm import sessionmaker
 
 
-shit_talk = {
-    -8: 'Shit Talk Severity -8',
-    -7: 'Shit Talk Severity -7',
-    -6: 'Shit Talk Severity -6',
-    -5: 'Shit Talk Severity -5',
-    -4: 'Shit Talk Severity -4',
-    -3: 'Shit Talk Severity -3',
-    -2: 'Shit Talk Severity -2',
-    -1: 'Shit Talk Severity -1',
-    0: 'Shit Talk Severity 0',
-    1: 'Shit Talk Severity 1',
-    2: 'Shit Talk Severity 2',
-    3: 'Shit Talk Severity 3',
-    4: 'Shit Talk Severity 4',
-    5: 'Shit Talk Severity 5',
-    6: 'Shit Talk Severity 6',
-    7: 'Shit Talk Severity 7',
-    8: 'Shit Talk Severity 8'
-}
+engine = models.get_engine(registry.settings)
+Session = sessionmaker(bind=engine)
+session = Session()
+
+shit_talk = session.query(models.KillScore).all()
 
 
 piece_lvl = {
