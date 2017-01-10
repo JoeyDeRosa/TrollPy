@@ -1,14 +1,13 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
-from ..models import User
+from ..models import User, KillScore
 from ..security import check_credentials
 
 
 
 @view_config(route_name='home', renderer='../templates/home.jinja2')
 def home_view(request):
-    # import pdb; pdb.set_trace()
     return {}
 
 
@@ -26,7 +25,8 @@ def registration_view(request):
             email=request.POST["email"]
         )
         request.dbsession.add(new_user)
-        return HTTPFound(request.route_url('home'))
+        auth_head = remember(request, new_name)
+        return HTTPFound(request.route_url('profile', userid=new_name), headers=auth_head)
     return {}
 
 
@@ -53,5 +53,16 @@ def logout_view(request):
 def profile_view(request):
     theuserid = request.matchdict['userid']
     the_user = request.dbsession.query(User).filter_by(username=theuserid).first()
-    # import pdb; pdb.set_trace()
     return {"user": the_user}
+
+
+@view_config(route_name='add_smack', renderer='../templates/add_smack.jinja2')
+def add_smack(request):
+    if request.method == "POST" and request.POST:
+        new_killscore = KillScore(
+            killscore_id=request.POST['killscore_id'],
+            statement=request.POST['statement']
+        )
+        request.dbsession.add(new_killscore)
+        return HTTPFound(request.route_url('add_smack'))
+    return {}

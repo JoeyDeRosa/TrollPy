@@ -5,3 +5,4 @@ def includeme(config):
     config.add_route('logout', '/logout')
     config.add_route('registration', '/registration')
     config.add_route('profile', '/profile/{userid:[\d\w]+}')
+    config.add_route('add_smack', '/add_smack')
