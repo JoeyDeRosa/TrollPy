@@ -3,87 +3,110 @@
 
 <div class="row">
   <div id="board" class="small-6 columns">
-    <script>
-      var board,
-      game = new Chess();
+  </div>
+<div id="board" class="small-6 columns">
+  <p>Current Game Stats:</p>
+  <p>Yea Baby</p>
+  </div>
+</div>
+<input type="button" id="startPositionBtn" value="new game" />
 
-      var removeGreySquares = function() {
-        $('#board .square-55d63').css('background', '');
-      };
+<script>
+var game = new Chess('{{ py_board }}');
 
-      var greySquare = function(square) {
-        var squareEl = $('#board .square-' + square);
+var removeGreySquares = function() {
+    $('#board .square-55d63').css('background', '');
+};
 
-        var background = '#a9a9a9';
-        if (squareEl.hasClass('black-3c85d') === true) {
-          background = '#696969';
-        }
+var greySquare = function(square) {
+    var squareEl = $('#board .square-' + square);
 
-        squareEl.css('background', background);
-      };
+    var background = '#a9a9a9';
+    if (squareEl.hasClass('black-3c85d') === true) {
+        background = '#696969';
+    }
 
-      var onDragStart = function(source, piece) {
-                // do not pick up pieces if the game is over
-                // or if it's not that side's turn
-                if (game.game_over() === true ||
-                  (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-                  (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-                  return false;
-              }
-            };
+    squareEl.css('background', background);
+};
 
-      var onDrop = function(source, target) {
-        removeGreySquares();
+var onDragStart = function(source, piece) {
+    // do not pick up pieces if the game is over
+    // or if it's not that side's turn
+    if (game.game_over() === true ||
+        (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+        (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+        return false;
+    }
+};
 
-        // see if the move is legal
-        var move = game.move({
-          from: source,
-          to: target,
-          promotion: 'q' // NOTE: always promote to a queen
-        });
+var onDrop = function(source, target) {
+    removeGreySquares();
 
-        // illegal move
-        if (move === null) return 'snapback';
-      };
+    // see if the move is legal
+    var move = game.move({
+        from: source,
+        to: target,
+        promotion: 'q' // NOTE: always promote to a queen
+    });
 
-      var onMouseoverSquare = function(square, piece) {
-        // get list of possible moves for this square
-        var moves = game.moves({
-          square: square,
-          verbose: true
-        });
+    // illegal move
+    if (move === null) return 'snapback';
+};
 
-        // exit if there are no moves available for this square
-        if (moves.length === 0) return;
+var onMouseoverSquare = function(square, piece) {
+    // get list of possible moves for this square
+    var moves = game.moves({
+        square: square,
+        verbose: true
+    });
 
-        // highlight the square they moused over
-        greySquare(square);
+    // exit if there are no moves available for this square
+    if (moves.length === 0) return;
 
-        // highlight the possible squares for this piece
-        for (var i = 0; i < moves.length; i++) {
-          greySquare(moves[i].to);
-        }
-      };
+    // highlight the square they moused over
+    greySquare(square);
 
-      var onMouseoutSquare = function(square, piece) {
-        removeGreySquares();
-      };
+    // highlight the possible squares for this piece
+    for (var i = 0; i < moves.length; i++) {
+        greySquare(moves[i].to);
+    }
+};
 
-      var onSnapEnd = function() {
-        board.position(game.fen());
-        $.ajax({
-          type:'POST',
-          url: '/{{ request.authenticated_userid }}/move',
-          data: {board: window.game.fen()},
-          success: function(){
+var onMouseoutSquare = function(square, piece) {
+    removeGreySquares();
+};
+
+var onSnapEnd = function() {
+    board.position(game.fen());
+    $.ajax({
+        type: 'POST',
+        url: '/{{ request.authenticated_userid }}/move',
+        data: {
+            board: window.game.fen()
+        },
+        success: function() {
             console.log("we made a move and it saved!")
-          }
-        });
-      }
+            get_board('{{ request.authenticated_userid }}')
+        }
+    });
+}
 
+function get_board(user) {
+    user_response = $.ajax({
+        dataType: "json",
+        url: user + '/api',
+        success: function() {
+            stuff = user_response.responseJSON;
+            render_board(stuff.board)
+            game = new Chess(stuff.board);
+            game.in_check()
+        }
+    });
+}
 
-      var cfg = {
-        position: '{{ py_board.fen }}',
+function render_board(fen) {
+    var cfg = {
+        position: fen,
         draggable: true,
         onDragStart: onDragStart,
         onDrop: onDrop,
@@ -92,16 +115,16 @@
         onMouseoutSquare: onMouseoutSquare,
         onMouseoverSquare: onMouseoverSquare,
         sparePieces: false
-      };
+    };
 
-      board = ChessBoard('board', cfg);
-      $(window).resize(board.resize);
-    </script>
-  </div>
-<div id="board" class="small-6 columns">
-  <p>Current Game Stats:</p>
-  <p>Yea Baby</p>
-  </div>
-</div>
+    board = ChessBoard('board', cfg);
+    $(window).resize(board.resize);
+    $('#startPositionBtn').click(function() {
+        game.reset();
+        board.start();
+    });
+}
 
+render_board('{{ py_board }}')
+</script>
 {% endblock %}

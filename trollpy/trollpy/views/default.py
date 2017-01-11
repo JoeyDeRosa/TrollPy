@@ -1,28 +1,21 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
-from ..models import User, KillScore, BoardPos
+from ..models import User, KillScore
 from ..security import check_credentials
 
 from ..chess_game import users_game
 
+
 @view_config(route_name='home', renderer='../templates/home.jinja2')
 def home_view(request):
     """Render a chessboard with the current FEN."""
-    if request.method == "POST" and request.POST:
-        user = request.dbsession.query(User).filter_by(username=request.authenticated_userid).first()
-        fen = user.board
-        new_move = users_game(fen)
-        board = BoardPos(fen=new_move)
-        return {"py_board": board}
-
     if request.authenticated_userid:
         user = request.dbsession.query(User).filter_by(username=request.authenticated_userid).first()
         fen = user.board
     else:
         fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
-    board = BoardPos(fen=fen)
-    return {"py_board": board}
+    return {"py_board": fen}
 
 
 @view_config(route_name='registration', renderer='../templates/registration.jinja2')

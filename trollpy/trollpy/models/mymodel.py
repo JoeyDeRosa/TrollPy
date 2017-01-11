@@ -60,15 +60,3 @@ class KillScore(Base):
             "killscore_id": self.killscore_id,
             "statement": self.statement
             }
-
-
-class BoardPos(Base):
-    """Chess Board model."""
-
-    __tablename__ = 'boardpos'
-    id = Column(Integer, primary_key=True)
-    fen = Column(Unicode)
-
-    def __init__(self, **kwargs):
-        """Chessboard constructor."""
-        self.fen = kwargs['fen']
