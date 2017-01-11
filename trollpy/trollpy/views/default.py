@@ -6,16 +6,10 @@ from ..security import check_credentials
 
 from ..chess_game import users_game
 
+
 @view_config(route_name='home', renderer='../templates/home.jinja2')
 def home_view(request):
     """Render a chessboard with the current FEN."""
-    if request.method == "POST" and request.POST:
-        user = request.dbsession.query(User).filter_by(username=request.authenticated_userid).first()
-        fen = user.board
-        new_move = users_game(fen)
-        board = BoardPos(fen=new_move)
-        return {"py_board": board}
-
     if request.authenticated_userid:
         user = request.dbsession.query(User).filter_by(username=request.authenticated_userid).first()
         fen = user.board
