@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/static/css/chessboard.css">
     <script src="/static/js/chessboard.js"></script>
     <script src="/static/js/vendor/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
 </head>
 
 <body>
@@ -23,7 +24,7 @@
     <nav class="large-12 columns">
         <ul>
             <li>
-                <a href="{{request.route_url('home')}}">Home</a>
+                <a href="{{request.route_url('home')}}">Play</a>
             </li>
             {% if request.authenticated_userid %}
             <li>
@@ -49,10 +50,8 @@
             {% block body %}{% endblock %}
         </div>
     </div>
-<div class="row">
-    <div id="board" class="large-8 columns"></div>
-    <script>var board = ChessBoard('board', 'start');</script>
-</div>
+
+
     <script src="/static/js/vendor/what-input.js"></script>
     <script src="/static/js/vendor/foundation.js"></script>
     <script src="/static/js/app.js"></script>
