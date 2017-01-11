@@ -1,14 +1,20 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
-from ..models import User, KillScore
+from ..models import User, KillScore, BoardPos
 from ..security import check_credentials
 
 
-
 @view_config(route_name='home', renderer='../templates/home.jinja2')
-def home_view(request):
-    return {}
+def home_view(request, new_fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'):
+    """Render a chessboard with the current FEN."""
+    #
+    #  TODO: the <fen='kwarg'> should be updated by the game to render the
+    #        board with the BoardPos model.
+    #
+    fen = new_fen
+    board = BoardPos(fen=fen)
+    return {"board": board}
 
 
 @view_config(route_name='registration', renderer='../templates/registration.jinja2')
@@ -68,3 +74,10 @@ def add_smack(request):
         request.dbsession.add(new_killscore)
         return HTTPFound(request.route_url('add_smack'))
     return {}
+
+
+@view_config(route_name='api_smack', renderer='json')
+def smack_json(request):
+    smack_dict = request.dbsession.query(KillScore).all()
+    output = [item.to_json() for item in smack_dict]
+    return output

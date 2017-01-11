@@ -35,3 +35,22 @@ class KillScore(Base):
     def __init__(self, **kwargs):
         self.killscore_id = kwargs['killscore_id']
         self.statement = kwargs['statement']
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "killscore_id": self.killscore_id,
+            "statement": self.statement
+            }
+
+
+class BoardPos(Base):
+    """Chess Board model."""
+
+    __tablename__ = 'boardpos'
+    id = Column(Integer, primary_key=True)
+    fen = Column(Unicode)
+
+    def __init__(self, **kwargs):
+        """Chessboard constructor."""
+        self.fen = kwargs['fen']
