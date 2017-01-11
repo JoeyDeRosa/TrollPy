@@ -8,14 +8,6 @@ from sqlalchemy import (
 
 from .meta import Base
 from passlib.apps import custom_app_context as pwd_context
-empty_board = [['bR', 'bT', 'bB', 'bQ', 'bK', 'bB', 'bT', 'bR'],
-               ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
-               ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-               ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-               ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-               ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-               ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
-               ['wR', 'wT', 'wB', 'wQ', 'wK', 'wB', 'wT', 'wR']]
 
 
 class User(Base):
@@ -36,7 +28,7 @@ class User(Base):
         self.first_name = kwargs['first_name']
         self.last_name = kwargs['last_name']
         self.email = kwargs['email']
-        self.board = str(empty_board)
+        self.board = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
         self.winner = 'None'
         self.in_check = False
 

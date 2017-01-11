@@ -4,30 +4,36 @@ from pyramid.security import remember, forget
 from ..models import User, KillScore, BoardPos
 from ..security import check_credentials
 
-from PythonChess.ChessBoard import ChessBoard
-from PythonChess.ChessAI import ChessAI_random
-from PythonChess.ChessGUI_text import ChessGUI_text
-from PythonChess.ChessRules import ChessRules
-
-empty_board = [['bR', 'bT', 'bB', 'bQ', 'bK', 'bB', 'bT', 'bR'],
-               ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
-               ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-               ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-               ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-               ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
-               ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
-               ['wR', 'wT', 'wB', 'wQ', 'wK', 'wB', 'wT', 'wR']]
+from ..chess_game import users_game
 
 @view_config(route_name='home', renderer='../templates/home.jinja2')
-def home_view(request, new_fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'):
+def home_view(request):
     """Render a chessboard with the current FEN."""
     #
     #  TODO: the <fen='kwarg'> should be updated by the game to render the
     #        board with the BoardPos model.
     #
-    fen = new_fen
-    board = BoardPos(fen=fen)
-    return {"board": board}
+    new_fen1 = request.matchdict['fenr1']
+    new_fen2 = request.matchdict['fenr2']
+    new_fen3 = request.matchdict['fenr3']
+    new_fen4 = request.matchdict['fenr4']
+    new_fen5 = request.matchdict['fenr5']
+    new_fen6 = request.matchdict['fenr6']
+    new_fen7 = request.matchdict['fenr7']
+    new_fen8 = request.matchdict['fenr8']
+    all_fen = (new_fen1, new_fen2, new_fen3, new_fen4, new_fen5, new_fen6, new_fen7, new_fen8)
+    new_fen = '/'.join(all_fen)
+    if request.method == "POST" and request.POST:
+        user_board = request.dbsession.query(User).filter_by(username=request.authenticatedUserId).first()
+        user_board.board = request.POST[new_fen]
+        return {user_board}
+    if 'None' in new_fen:
+        fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+        board = BoardPos(fen=fen)
+    else:
+        fen = new_fen
+        board = BoardPos(fen=fen)
+    return {"py_board": board}
 
 
 @view_config(route_name='registration', renderer='../templates/registration.jinja2')
@@ -100,16 +106,17 @@ def smack_json(request):
 def user_board_json(request):
     theuserid = request.matchdict['userid']
     user = request.dbsession.query(User).filter_by(username=theuserid)
-    json = user.first().to_json()
-    if not user.first().winner == 'None':
-        user.update({'board': str(empty_board)})
-    return json
+    return user.first().to_json()
 
 
 @view_config(route_name='make_move')
 def make_move(request):
     if request.method == "POST" and request.POST:
         theuserid = request.matchdict['userid']
-        move = request.POST['move']
+        board = request.POST['board']
         user = request.dbsession.query(User).filter_by(username=theuserid)
-        board = user.first().board
+        board_winner = users_game(board)
+        if not board_winner[1]:
+            user.update({'winner': board_winner[1], 'board': board_winner[0]})
+        user.update({'board': board_winner[0]})
+        return HTTPFound(request.route_url('home'))
