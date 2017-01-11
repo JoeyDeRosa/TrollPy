@@ -9,30 +9,19 @@ from ..chess_game import users_game
 @view_config(route_name='home', renderer='../templates/home.jinja2')
 def home_view(request):
     """Render a chessboard with the current FEN."""
-    #
-    #  TODO: the <fen='kwarg'> should be updated by the game to render the
-    #        board with the BoardPos model.
-    #
-    new_fen1 = request.matchdict['fenr1']
-    new_fen2 = request.matchdict['fenr2']
-    new_fen3 = request.matchdict['fenr3']
-    new_fen4 = request.matchdict['fenr4']
-    new_fen5 = request.matchdict['fenr5']
-    new_fen6 = request.matchdict['fenr6']
-    new_fen7 = request.matchdict['fenr7']
-    new_fen8 = request.matchdict['fenr8']
-    all_fen = (new_fen1, new_fen2, new_fen3, new_fen4, new_fen5, new_fen6, new_fen7, new_fen8)
-    new_fen = '/'.join(all_fen)
     if request.method == "POST" and request.POST:
-        user_board = request.dbsession.query(User).filter_by(username=request.authenticatedUserId).first()
-        user_board.board = request.POST[new_fen]
-        return {user_board}
-    if 'None' in new_fen:
-        fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
-        board = BoardPos(fen=fen)
+        user = request.dbsession.query(User).filter_by(username=request.authenticated_userid).first()
+        fen = user.board
+        new_move = users_game(fen)
+        board = BoardPos(fen=new_move)
+        return {"py_board": board}
+
+    if request.authenticated_userid:
+        user = request.dbsession.query(User).filter_by(username=request.authenticated_userid).first()
+        fen = user.board
     else:
-        fen = new_fen
-        board = BoardPos(fen=fen)
+        fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+    board = BoardPos(fen=fen)
     return {"py_board": board}
 
 
