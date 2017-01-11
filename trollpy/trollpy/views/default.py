@@ -4,6 +4,19 @@ from pyramid.security import remember, forget
 from ..models import User, KillScore
 from ..security import check_credentials
 
+from PythonChess.ChessBoard import ChessBoard
+from PythonChess.ChessAI import ChessAI_random
+from PythonChess.ChessGUI_text import ChessGUI_text
+from PythonChess.ChessRules import ChessRules
+
+empty_board = [['bR', 'bT', 'bB', 'bQ', 'bK', 'bB', 'bT', 'bR'],
+               ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+               ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+               ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+               ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+               ['e', 'e', 'e', 'e', 'e', 'e', 'e', 'e'],
+               ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+               ['wR', 'wT', 'wB', 'wQ', 'wK', 'wB', 'wT', 'wR']]
 
 
 @view_config(route_name='home', renderer='../templates/home.jinja2')
@@ -77,21 +90,20 @@ def smack_json(request):
     return output
 
 
-# @view_config(route_name='chess_game')
-# def chess_game(request):
-#     from ..PythonChess import PythonChessMain
-#     parser = PythonChessMain.OptionParser()
-#     parser.add_option("-d", dest="debug",
-#                   action="store_true", default=False, help="Enable debug mode (different starting board configuration)")
-#     parser.add_option("-t", dest="text",
-#                   action="store_true", default=False, help="Use text-based GUI")
-#     parser.add_option("-o", dest="old",
-#                   action="store_true", default=False, help="Use old graphics in pygame GUI")
-#     parser.add_option("-p", dest="pauseSeconds", metavar="SECONDS",
-#                   action="store", default=0, help="Sets time to pause between moves in AI vs. AI games (default = 0)")
+@view_config(route_name='api_user', renderer='json')
+def user_board_json(request):
+    theuserid = request.matchdict['userid']
+    user = request.dbsession.query(User).filter_by(username=theuserid)
+    json = user.first().to_json()
+    if not user.first().winner == 'None':
+        user.update({'board': str(empty_board)})
+    return json
 
 
-#     (options,args) = parser.parse_args()
-#     game = PythonChessMain.PythonChessMain(options)
-#     game.SetUp(options)
-#     game.MainLoop()
+@view_config(route_name='make_move')
+def make_move(request):
+    if request.method == "POST" and request.POST:
+        theuserid = request.matchdict['userid']
+        move = request.POST['move']
+        user = request.dbsession.query(User).filter_by(username=theuserid)
+        board = user.first().board

@@ -8,3 +8,5 @@ def includeme(config):
     config.add_route('add_smack', '/add_smack')
     config.add_route('api_smack', '/smack_api')
     config.add_route('chess_game', '/chess')
+    config.add_route('api_user', '/{userid:[\d\w]+}/api')
+    config.add_route('make_move', '/{userid:[\d\w]+}/move')
