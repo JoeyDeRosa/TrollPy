@@ -15,10 +15,10 @@ def game():
         move = input('your move: ')
         while chess.Move.from_uci(move) not in board.legal_moves:
             print('Not a legal move.')
+            move = input('your move: ')
         board.push_uci(move)
         print(board)
         troll_move = troll()
-        print(troll_move)
         board.push(troll_move)
 
 
@@ -26,10 +26,10 @@ def troll():
     """Generate a move for the troll."""
     possible_moves = []
     for i in board.legal_moves:
-        print(i)
         possible_moves.append(i)
     print(possible_moves)
-    troll_move = random.randint(0, len(board.legal_moves))
+    troll_move = random.randint(0, len(board.legal_moves) - 1)
+    print(troll_move)
     return possible_moves[troll_move]
 
 
