@@ -24,7 +24,16 @@
     <nav class="large-12 columns">
         <ul>
             <li>
-                <a href="{{request.route_url('home')}}">Play</a>
+                <a href="{{request.route_url('home',
+                           fenr1=None,
+                           fenr2=None,
+                           fenr3=None,
+                           fenr4=None,
+                           fenr5=None,
+                           fenr6=None,
+                           fenr7=None,
+                           fenr8=None
+                           )}}">Play</a>
             </li>
             {% if request.authenticated_userid %}
             <li>
