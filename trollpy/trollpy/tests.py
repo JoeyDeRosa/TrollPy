@@ -19,8 +19,8 @@ class BaseTest(unittest.TestCase):
         from .models import (
             get_engine,
             get_session_factory,
-            get_tm_session,
-            )
+            get_tm_session
+        )
 
         self.engine = get_engine(settings)
         session_factory = get_session_factory(self.engine)
@@ -78,21 +78,21 @@ def test_chess_ai_random_get_move():
     bot = ChessAI_random
 
 
-# @pytest.fixture
-# def testapp():
-#     """Test an instance of webtests TestApp for testing routes."""
-#
-#     from webtest import TestApp
-#     from mymodel import main
-#
-#     app = main({}, **{"sqlalchemy.url": 'sqlite:///:memory:'})
-#     testapp = TestApp(app)
-#
-#     SessionFactory = app.registry["dbsession_factory"]
-#     engine = SessionFactory().bind
-#     Base.metadata.create_all(bind=engine)
-#
-#     return testapp
+@pytest.fixture
+def testapp():
+    """Test an instance of webtests TestApp for testing routes."""
+
+    from webtest import TestApp
+    from mymodel import main
+
+    app = main({}, **{"sqlalchemy.url": 'sqlite:///:memory:'})
+    testapp = TestApp(app)
+
+    SessionFactory = app.registry["dbsession_factory"]
+    engine = SessionFactory().bind
+    Base.metadata.create_all(bind=engine)
+
+    return testapp
 #
 #
 # @pytest.fixture
