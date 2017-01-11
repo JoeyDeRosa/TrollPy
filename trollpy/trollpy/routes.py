@@ -1,6 +1,6 @@
 def includeme(config):
     config.add_static_view(name='static', path='static', cache_max_age=3600)
-    config.add_route('home', '/board/{fenr1:[\d\w]+}/{fenr2:[\d\w]+}/{fenr3:[\d\w]+}/{fenr4:[\d\w]+}/{fenr5:[\d\w]+}/{fenr6:[\d\w]+}/{fenr7:[\d\w]+}/{fenr8:[\d\w]+}/')
+    config.add_route('home', '/')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
     config.add_route('registration', '/registration')

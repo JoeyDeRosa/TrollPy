@@ -21,8 +21,7 @@ requires = [
     'pyramid_ipython',
     'psycopg2',
     'passlib',
-    'pygame',
-    'faker'
+    'python-chess'
     ]
 
 tests_require = [
