@@ -22,6 +22,7 @@ requires = [
     'psycopg2',
     'passlib',
     'pygame',
+    'faker'
     ]
 
 tests_require = [

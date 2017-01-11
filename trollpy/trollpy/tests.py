@@ -76,3 +76,63 @@ def test_chess_ai_random_get_move():
     """Test for the get move method of the chess ai random class."""
     from ..PythonChess.ChessAI import ChessAI_random
     bot = ChessAI_random
+
+
+# @pytest.fixture
+# def testapp():
+#     """Test an instance of webtests TestApp for testing routes."""
+#
+#     from webtest import TestApp
+#     from mymodel import main
+#
+#     app = main({}, **{"sqlalchemy.url": 'sqlite:///:memory:'})
+#     testapp = TestApp(app)
+#
+#     SessionFactory = app.registry["dbsession_factory"]
+#     engine = SessionFactory().bind
+#     Base.metadata.create_all(bind=engine)
+#
+#     return testapp
+#
+#
+# @pytest.fixture
+# def set_auth_credentials():
+#     """Make a username/password combo for testing."""
+#     import os
+#     from passlib.apps import custom_app_context as pwd_context
+#
+#     os.environ["AUTH_USERNAME"] = "testme"
+#     os.environ["AUTH_PASSWORD"] = pwd_context.hash("foobar")
+#
+#
+# @pytest.fixture
+# def fill_the_db(testapp):
+#     """Fill the database with some model instances.
+#     Start a database session with the transaction manager and add all of the
+#     expenses. This will be done anew for every test.
+#     """
+#     SessionFactory = testapp.app.registry["dbsession_factory"]
+#     with transaction.manager:
+#         dbsession = get_tm_session(SessionFactory, transaction.manager)
+#         dbsession.add_all()
+#
+#
+# def test_home_route_has_table(testapp):
+#     """The home page has a table in the html."""
+#     response = testapp.get('/', status=200)
+#     html = response.html
+#     assert len(html.find_all("table")) == 1
+#
+#
+# def test_home_route_with_data(testapp, fill_the_db):
+#     """When there's data in the database, the home page has some rows."""
+#     response = testapp.get('/', status=200)
+#     html = response.html
+#     assert len(html.find_all("tr")) == 101
+#
+#
+# def test_home_route(testapp):
+#     """Without data the home page only has the header row in its table."""
+#     response = testapp.get('/', status=200)
+#     html = response.html
+#     assert len(html.find_all("tr")) == 1
