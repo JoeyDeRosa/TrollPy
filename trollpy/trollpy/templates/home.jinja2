@@ -73,10 +73,10 @@
         board.position(game.fen());
         $.ajax({
           type:'POST',
-          url: '/board/' + window.board.fen(),
-          data: {board: window.board.fen()},
+          url: '/{{ request.authenticated_userid }}/move',
+          data: {board: window.game.fen()},
           success: function(){
-            console.log("WHAT WHAT???");
+            console.log("we made a move and it saved!")
           }
         });
       }
