@@ -77,25 +77,41 @@
           data: {board: window.game.fen()},
           success: function(){
             console.log("we made a move and it saved!")
+            get_board('{{ request.authenticated_userid }}')
           }
         });
       }
 
+      function get_board(user) {
+        user_response = $.ajax({
+              dataType: "json",
+              url: user + '/api',
+              success: function(){
+                stuff = user_response.responseJSON;
+                render_board(stuff.board)
+                game = new Chess(stuff.board);
+              }
+            });
+      }
 
-      var cfg = {
-        position: '{{ py_board.fen }}',
-        draggable: true,
-        onDragStart: onDragStart,
-        onDrop: onDrop,
-        onSnapEnd: onSnapEnd,
-        dropOffBoard: 'snapback',
-        onMouseoutSquare: onMouseoutSquare,
-        onMouseoverSquare: onMouseoverSquare,
-        sparePieces: false
-      };
+      function render_board(fen) {
+          var cfg = {
+            position: fen,
+            draggable: true,
+            onDragStart: onDragStart,
+            onDrop: onDrop,
+            onSnapEnd: onSnapEnd,
+            dropOffBoard: 'snapback',
+            onMouseoutSquare: onMouseoutSquare,
+            onMouseoverSquare: onMouseoverSquare,
+            sparePieces: false
+          };
 
-      board = ChessBoard('board', cfg);
-      $(window).resize(board.resize);
+          board = ChessBoard('board', cfg);
+          $(window).resize(board.resize);
+      }
+
+      render_board('{{ py_board.fen }}')
     </script>
   </div>
 <div id="board" class="small-6 columns">
