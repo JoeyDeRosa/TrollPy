@@ -12,7 +12,7 @@
 <input type="button" id="startPositionBtn" value="new game" />
 
 <script>
-var game = new Chess('{{ py_board.fen }}');
+var game = new Chess('{{ py_board }}');
 
 var removeGreySquares = function() {
     $('#board .square-55d63').css('background', '');
@@ -125,6 +125,6 @@ function render_board(fen) {
     });
 }
 
-render_board('{{ py_board.fen }}')
+render_board('{{ py_board }}')
 </script>
 {% endblock %}

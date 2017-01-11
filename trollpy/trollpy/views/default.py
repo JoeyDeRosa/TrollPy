@@ -1,7 +1,7 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
-from ..models import User, KillScore, BoardPos
+from ..models import User, KillScore
 from ..security import check_credentials
 
 from ..chess_game import users_game
@@ -15,8 +15,7 @@ def home_view(request):
         fen = user.board
     else:
         fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
-    board = BoardPos(fen=fen)
-    return {"py_board": board}
+    return {"py_board": fen}
 
 
 @view_config(route_name='registration', renderer='../templates/registration.jinja2')
