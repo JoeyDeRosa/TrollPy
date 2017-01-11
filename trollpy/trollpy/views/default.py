@@ -6,7 +6,7 @@ from ..security import check_credentials
 
 
 @view_config(route_name='home', renderer='../templates/home.jinja2')
-def home_view(request, new_fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBKQBNR'):
+def home_view(request, new_fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'):
     """Render a chessboard with the current FEN."""
     #
     #  TODO: the <fen='kwarg'> should be updated by the game to render the
