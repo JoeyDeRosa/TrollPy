@@ -4,10 +4,7 @@ from pyramid.security import remember, forget
 from ..models import User, KillScore, BoardPos
 from ..security import check_credentials
 
-from PythonChess.ChessBoard import ChessBoard
-from PythonChess.ChessAI import ChessAI_random
-from PythonChess.ChessGUI_text import ChessGUI_text
-from PythonChess.ChessRules import ChessRules
+from ..chess_game import users_game
 
 empty_board = [['bR', 'bT', 'bB', 'bQ', 'bK', 'bB', 'bT', 'bR'],
                ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
@@ -100,16 +97,17 @@ def smack_json(request):
 def user_board_json(request):
     theuserid = request.matchdict['userid']
     user = request.dbsession.query(User).filter_by(username=theuserid)
-    json = user.first().to_json()
-    if not user.first().winner == 'None':
-        user.update({'board': str(empty_board)})
-    return json
+    return user.first().to_json()
 
 
 @view_config(route_name='make_move')
 def make_move(request):
     if request.method == "POST" and request.POST:
         theuserid = request.matchdict['userid']
-        move = request.POST['move']
+        board = request.POST['board']
         user = request.dbsession.query(User).filter_by(username=theuserid)
-        board = user.first().board
+        board_winner = users_game(board)
+        if not board_winner[1]:
+            user.update({'winner': board_winner[1], 'board': board_winner[0]})
+        user.update({'board': board_winner[0]})
+        return HTTPFound(request.route_url('home'))
