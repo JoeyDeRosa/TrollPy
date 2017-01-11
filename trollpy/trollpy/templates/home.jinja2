@@ -71,11 +71,15 @@
 
       var onSnapEnd = function() {
         board.position(game.fen());
-        $.post('/home', new_fen=window.board.fen(), Function(){
-          $.get('/home', new_fen= )
-        })
-        console.log(window.board.fen())
-      };
+        $.ajax({
+          type:'POST',
+          url: '/board/' + window.board.fen(),
+          data: {board: window.board.fen()},
+          success: function(){
+            console.log("WHAT WHAT???");
+          }
+        });
+      }
 
 
       var cfg = {
