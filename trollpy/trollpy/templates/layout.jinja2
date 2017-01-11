@@ -7,6 +7,9 @@
     <title>{% block title %}Chess{% endblock %} - TrollPy</title>
     <link rel="stylesheet" href="/static/css/foundation.css">
     <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="stylesheet" href="/static/css/chessboard.css">
+    <script src="/static/js/chessboard.js"></script>
+    <script src="/static/js/vendor/jquery.js"></script>
 </head>
 
 <body>
@@ -46,8 +49,10 @@
             {% block body %}{% endblock %}
         </div>
     </div>
-
-    <script src="/static/js/vendor/jquery.js"></script>
+<div class="row">
+    <div id="board" class="large-8 columns"></div>
+    <script>var board = ChessBoard('board', 'start');</script>
+</div>
     <script src="/static/js/vendor/what-input.js"></script>
     <script src="/static/js/vendor/foundation.js"></script>
     <script src="/static/js/app.js"></script>
