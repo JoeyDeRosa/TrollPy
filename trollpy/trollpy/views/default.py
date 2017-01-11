@@ -3,6 +3,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
 from ..models import User, KillScore, BoardPos
 from ..security import check_credentials
+import json
 
 from PythonChess.ChessBoard import ChessBoard
 from PythonChess.ChessAI import ChessAI_random
@@ -109,7 +110,32 @@ def user_board_json(request):
 @view_config(route_name='make_move')
 def make_move(request):
     if request.method == "POST" and request.POST:
+        rule = ChessRules()
+        user_move = ChessGUI_text()
         theuserid = request.matchdict['userid']
-        move = request.POST['move']
+        move = json.loads(request.POST['move'])
+        a1 = tuple(move[0])
+        a2 = tuple(move[1])
+        move = (a1, a2)
         user = request.dbsession.query(User).filter_by(username=theuserid)
-        board = user.first().board
+        board = empty_board
+        # import pdb; pdb.set_trace()
+        if rule.IsCheckmate(board, 'white'):
+            user.update({'winner': 'AI'})
+        elif rule.IsCheckmate(board, 'black'):
+            user.update({'winner': 'User'})
+        else:
+            if rule.IsInCheck(board, 'white'):
+                user.update({'in_check': True})
+            else:
+                user.update({'in_check': False})
+                if user_move.GetPlayerInput(board, 'white', move):
+                    print('Valid Move')
+                    chess_board = ChessBoard(0)
+                    chess_board.squares = board
+                    chess_board.MovePiece(move)
+                    ai = ChessAI_random('Trump', 'black')
+                    ai_move = ai.GetMove(board, 'black')
+                    chess_board.MovePiece(ai_move)
+                    print(chess_board.GetState())
+                    return HTTPFound(request.route_url('home'))
