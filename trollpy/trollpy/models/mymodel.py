@@ -12,11 +12,11 @@ from passlib.apps import custom_app_context as pwd_context
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    username = Column(Unicode)
+    username = Column(Unicode, unique=True)
     password = Column(Unicode)
     first_name = Column(Unicode)
     last_name = Column(Unicode)
-    email = Column(Unicode)
+    email = Column(Unicode, unique=True)
 
     def __init__(self, **kwargs):
         self.username = kwargs['username']
@@ -30,7 +30,7 @@ class KillScore(Base):
     __tablename__ = 'killscore'
     id = Column(Integer, primary_key=True)
     killscore_id = Column(Integer)
-    statement = Column(Unicode)
+    statement = Column(Unicode, unique=True)
 
     def __init__(self, **kwargs):
         self.killscore_id = kwargs['killscore_id']

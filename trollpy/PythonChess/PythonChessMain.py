@@ -74,8 +74,8 @@ from optparse import OptionParser
 import time
 import os
 
-# from ..trollpy import models
-# from sqlalchemy.orm import sessionmaker
+from trollpy import models
+from sqlalchemy.orm import sessionmaker
 
 
 # engine = models.get_engine(registry.settings)
