@@ -1,36 +1,31 @@
-{% extends "layout.jinja2" %}
-{% block body %}
 
-<div class="row">
-  <div id="board" class="small-6 columns">
-    <script>
-      var board,
-      game = new Chess();
+var board,
+game = new Chess();
 
-      var removeGreySquares = function() {
-        $('#board .square-55d63').css('background', '');
-      };
+var removeGreySquares = function() {
+  $('#board .square-55d63').css('background', '');
+};
 
-      var greySquare = function(square) {
-        var squareEl = $('#board .square-' + square);
+var greySquare = function(square) {
+  var squareEl = $('#board .square-' + square);
 
-        var background = '#a9a9a9';
-        if (squareEl.hasClass('black-3c85d') === true) {
-          background = '#696969';
+  var background = '#a9a9a9';
+  if (squareEl.hasClass('black-3c85d') === true) {
+    background = '#696969';
+  }
+
+  squareEl.css('background', background);
+};
+
+var onDragStart = function(source, piece) {
+          // do not pick up pieces if the game is over
+          // or if it's not that side's turn
+          if (game.game_over() === true ||
+            (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+            (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+            return false;
         }
-
-        squareEl.css('background', background);
       };
-
-      var onDragStart = function(source, piece) {
-                // do not pick up pieces if the game is over
-                // or if it's not that side's turn
-                if (game.game_over() === true ||
-                  (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-                  (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-                  return false;
-              }
-            };
 
       var onDrop = function(source, target) {
         removeGreySquares();
@@ -41,6 +36,13 @@
           to: target,
           promotion: 'q' // NOTE: always promote to a queen
         });
+
+
+
+        {{ }} window.board.fen()
+
+
+
 
         // illegal move
         if (move === null) return 'snapback';
@@ -71,10 +73,6 @@
 
       var onSnapEnd = function() {
         board.position(game.fen());
-        $.post('/home', new_fen=window.board.fen(), Function(){
-          $.get('/home', new_fen= )
-        })
-        console.log(window.board.fen())
       };
 
 
@@ -92,12 +90,5 @@
 
       board = ChessBoard('board', cfg);
       $(window).resize(board.resize);
-    </script>
-  </div>
-<div id="board" class="small-6 columns">
-  <p>Current Game Stats:</p>
-  <p>Yea Baby</p>
-  </div>
-</div>
 
-{% endblock %}
+      // updateStatus();
