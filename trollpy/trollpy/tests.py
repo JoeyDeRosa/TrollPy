@@ -63,3 +63,16 @@ class TestMyViewFailureCondition(BaseTest):
         from .views.default import my_view
         info = my_view(dummy_request(self.session))
         self.assertEqual(info.status_int, 500)
+
+
+def test_chess_ai():
+    """Test that chess ai is creted."""
+    from ..PythonChess.ChessAI import ChessAI
+    bot = ChessAI('troll', 'white')
+    assert bot.GetName() is 'troll' and bot.GetColor() is 'white'
+
+
+def test_chess_ai_random_get_move():
+    """Test for the get move method of the chess ai random class."""
+    from ..PythonChess.ChessAI import ChessAI_random
+    bot = ChessAI_random

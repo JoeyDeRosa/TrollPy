@@ -7,7 +7,7 @@
 # import modules
 from distutils.core import setup
 import sys, os, shutil, pygame
-import py2exe
+# import py2exe
 
 
 #########################

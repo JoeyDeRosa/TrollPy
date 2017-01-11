@@ -21,7 +21,6 @@ requires = [
     'pyramid_ipython',
     'psycopg2',
     'passlib',
-    'pyalexa-skill',
     'pygame',
     ]
 
@@ -47,6 +46,7 @@ setup(name='trollpy',
       url='',
       keywords='web wsgi bfg pylons pyramid',
       packages=find_packages(),
+      package_dir={'': '.'},
       include_package_data=True,
       zip_safe=False,
       extras_require={
