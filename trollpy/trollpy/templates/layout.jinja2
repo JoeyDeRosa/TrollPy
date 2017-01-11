@@ -1,33 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html class="no-js" lang="en" dir="ltr">
 <head>
-  <title>{% block title %}Troll Py{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Chess{% endblock %} - TrollPy</title>
+    <link rel="stylesheet" href="/static/css/foundation.css">
+    <link rel="stylesheet" href="/static/css/app.css">
 </head>
+
 <body>
     <header>
-        <nav>
-            <ul>
-                <li>
-                    <a href="{{request.route_url('home')}}">Home</a>
-                </li>
-                {% if request.authenticated_userid %}
-                    <li>
-                        <a href="{{request.route_url('profile', userid=request.authenticated_userid)}}">Profile</a>
-                    </li>
-                    <li>
-                        <a href="{{request.route_url('logout')}}">Log Out</a>
-                    </li>
-                {% else %}            
-                    <li>
-                        <a href="{{request.route_url('registration')}}">Register</a>
-                    </li>
-                    <li>
-                        <a href="{{request.route_url('login')}}">Log In</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
+        <div class="row">
+            <div class="large-12 columns">
+                <h1>Welcome to TrollPy-Chess</h1>
+            </div>
+        </div>
     </header>
-  {% block body %}{% endblock %}
+    <nav class="large-12 columns">
+        <ul>
+            <li>
+                <a href="{{request.route_url('home')}}">Home</a>
+            </li>
+            {% if request.authenticated_userid %}
+            <li>
+                <a href="{{request.route_url('profile', userid=request.authenticated_userid)}}">Profile</a>
+            </li>
+            <li>
+                <a href="{{request.route_url('logout')}}">Log Out</a>
+            </li>
+            {% else %}            
+            <li>
+                <a href="{{request.route_url('registration')}}">Register</a>
+            </li>
+            <li>
+                <a href="{{request.route_url('login')}}">Log In</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+
+    <div class="row">
+        <div class="large-12 columns">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+
+    <script src="/static/js/vendor/jquery.js"></script>
+    <script src="/static/js/vendor/what-input.js"></script>
+    <script src="/static/js/vendor/foundation.js"></script>
+    <script src="/static/js/app.js"></script>
 </body>
 </html>
