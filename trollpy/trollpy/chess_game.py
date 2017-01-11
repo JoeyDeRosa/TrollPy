@@ -10,18 +10,17 @@ def users_game(user_board):
     def game(user_board):
         """Run the chess game."""
         board = get_board(user_board)
-        while True:
-            print(board)
-            board.set_fen(user_board)
-            if board.is_game_over():
-                return 'You win.'
-            print(board)
-            print(board.fen())
-            troll_move = troll(board)
-            board.push(troll_move)
-            if board.is_game_over():
-                return 'You lose.'
-            return board.fen()
+        print(board)
+        board.set_fen(user_board)
+        if board.is_game_over():
+            winner = 'User'
+        print(board)
+        print(board.fen())
+        troll_move = troll(board)
+        board.push(troll_move)
+        if board.is_game_over():
+            winner = 'Troll'
+        return board.fen()
 
     def get_board(user_board):
         """Get the board setup that will be used."""
@@ -62,3 +61,6 @@ def users_game(user_board):
         if len(moves['med_priority_moves']) > 0:
             return moves['med_priority_moves']
         return moves['low_priority_moves']
+    troll_move = game(user_board)
+    winner = None
+    return (troll_move, winner)
