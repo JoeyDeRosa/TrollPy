@@ -3,6 +3,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
 from ..models import User, KillScore
 from ..security import check_credentials
+from passlib.apps import custom_app_context as pwd_context
 
 from ..chess_game import users_game
 
@@ -65,6 +66,12 @@ def logout_view(request):
 def profile_view(request):
     theuserid = request.matchdict['userid']
     the_user = request.dbsession.query(User).filter_by(username=theuserid).first()
+    if request.method == 'POST' and request.POST:
+        the_user.password = pwd_context.hash(request.POST["password"])
+        the_user.first_name = request.POST["first_name"]
+        the_user.last_name = request.POST["last_name"]
+        the_user.email = request.POST["email"]
+        return HTTPFound(request.route_url('profile', userid=theuserid))
     return {"user": the_user}
 
 

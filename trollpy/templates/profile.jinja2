@@ -8,4 +8,16 @@
     <li>Admin Status: {{ user.admin }}</li>
 </ul>
 
+<input type="button" class="button hollow" id="editprofile" value="Change Profile Settings"/>
+
+<form method="POST" id="editform"></form>
+
+<script>
+ $(function(){
+        $('#editprofile').click(function() {
+            $('#editform').append('<p><label for="password">Password: </label><input type="password" name="password" required/></p><p><label for="first_name">First Name: </label><input type="text" name="first_name" required/></p><p><label for="last_name">Last Name: </label><input type="text" name="last_name" required/></p><p><label for="email">Email: </label><input type="email" name="email" required/></p><input type="submit" value="Submit"/>');
+        });
+    });
+</script>
+
 {% endblock %}
