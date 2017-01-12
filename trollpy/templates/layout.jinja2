@@ -14,51 +14,36 @@
 </head>
 
 <body>
-    <header>
-        <div class="row">
-            <div class="large-12 columns">
-                <h1>Welcome to TrollPy-Chess</h1>
-            </div>
-        </div>
-    </header>
-    <nav class="large-12 columns">
-        <ul>
-            <li>
-                <a href="{{request.route_url('home',
-                           fenr1=None,
-                           fenr2=None,
-                           fenr3=None,
-                           fenr4=None,
-                           fenr5=None,
-                           fenr6=None,
-                           fenr7=None,
-                           fenr8=None
-                           )}}">Play</a>
-            </li>
-            {% if request.authenticated_userid %}
-            <li>
-                <a href="{{request.route_url('profile', userid=request.authenticated_userid)}}">Profile</a>
-            </li>
-            <li>
-                <a href="{{request.route_url('logout')}}">Log Out</a>
-            </li>
-            {% else %}            
-            <li>
-                <a href="{{request.route_url('registration')}}">Register</a>
-            </li>
-            <li>
-                <a href="{{request.route_url('login')}}">Log In</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-
 
     <div class="row">
-        <div class="large-12 columns">
+        <div class="medium-6 columns">
             {% block body %}{% endblock %}
         </div>
+        <nav class="medium-6 columns">
+            <h1>TrollPy-Chess</h1>
+            <ul>
+                <li>
+                    <a href="{{ request.route_url('home') }}">Play</a>
+                </li>
+                {% if request.authenticated_userid %}
+                <li>
+                    Logged in as <a href="{{ request.route_url('profile', userid=request.authenticated_userid) }}">{{ user.username }}</a>
+                </li>
+                <li>
+                    <a href="{{ request.route_url('logout') }}">Log Out</a>
+                </li>
+                {% else %}            
+                <li>
+                    <a href="{{ request.route_url('registration') }}">Register</a>
+                </li>
+                <li>
+                    <a href="{{ request.route_url('login') }}">Log In</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
+
 
 
     <script src="/static/js/vendor/what-input.js"></script>
