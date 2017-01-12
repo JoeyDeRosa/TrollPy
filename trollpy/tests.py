@@ -201,3 +201,12 @@ def test_user_board_json(testapp, fill_the_db):
     """Test that get user board gets current chess board."""
     board = testapp.get('/amos/api', status=200).json['board']
     assert board == 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+
+
+def test_make_move(testapp, fill_the_db):
+    """Test that making a move adds new board to the db."""
+    board = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    move = 'rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1'
+    testapp.post('/amos/move', {'board': move}, status=302)
+    board_sql = testapp.get('/amos/api', status=200).json['board']
+    assert not board == board_sql
