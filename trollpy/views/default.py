@@ -14,7 +14,7 @@ def home_view(request):
         user = request.dbsession.query(User).filter_by(username=request.authenticated_userid).first()
         fen = user.board
     else:
-        fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+        fen = '8/8/8/8/8/8/8/8'
     return {"py_board": fen}
 
 
