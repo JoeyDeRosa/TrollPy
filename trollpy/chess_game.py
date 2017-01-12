@@ -39,6 +39,8 @@ def users_game(user_board, request):
             'high_priority_moves': [],
             'med_priority_moves': [],
             'low_priority_moves': [],
+            'undesirable_moves_one': [],
+            'undesirable_moves_two': [],
         }
         moves = prioritize_troll_moves(moves, board)
         prefered_move_list = select_move_list(moves, board)
@@ -49,25 +51,47 @@ def users_game(user_board, request):
         """Return a dictionary of the trolls moves seperated by priority."""
         for move in board.legal_moves:
             if board.is_capture(move):
-                if board.is_attacked_by(chess.WHITE, move.to_square):
-                    moves['med_priority_moves'].append(move)
-                else:
-                    board.push(move)
+                board.push(move)
+                for next_move in board.legal_moves:
+                    board.push(next_move)
                     if board.is_check():
                         board.pop()
-                        moves['prioritize_king_one'].append(move)
-                    else:
-                        moves['high_priority_moves'].append(move)
-            else:
-                if board.is_attacked_by(chess.WHITE, move.to_square):
-                    moves['low_priority_moves'].append(move)
-                else:
-                    board.push(move)
-                    if board.is_check():
-                        board.pop()
-                        moves['prioritize_king_two'].append(move)
-                    else:
+                        moves['undesirable_moves_one'].append(move)
+                        break
+                    board.pop()
+                board.pop()
+                if move not in moves['undesirable_moves_one']:
+                    if board.is_attacked_by(chess.WHITE, move.to_square):
                         moves['med_priority_moves'].append(move)
+                    else:
+                        board.push(move)
+                        if board.is_check():
+                            board.pop()
+                            moves['prioritize_king_one'].append(move)
+                        else:
+                            board.pop()
+                            moves['high_priority_moves'].append(move)
+            else:
+                board.push(move)
+                for next_move in board.legal_moves:
+                    board.push(next_move)
+                    if board.is_check():
+                        board.pop()
+                        moves['undesirable_moves_two'].append(move)
+                        break
+                    board.pop()
+                board.pop()
+                if move not in moves['undesirable_moves_two']:
+                    if board.is_attacked_by(chess.WHITE, move.to_square):
+                        moves['low_priority_moves'].append(move)
+                    else:
+                        board.push(move)
+                        if board.is_check():
+                            board.pop()
+                            moves['prioritize_king_two'].append(move)
+                        else:
+                            board.pop()
+                            moves['med_priority_moves'].append(move)
         return moves
 
     def select_move_list(moves, board):
@@ -80,7 +104,11 @@ def users_game(user_board, request):
             return moves['high_priority_moves']
         if len(moves['med_priority_moves']) > 0:
             return moves['med_priority_moves']
-        return moves['low_priority_moves']
+        if len(moves['low_priority_moves']) > 0:
+            return moves['low_priority_moves']
+        if len(moves['undesirable_moves_one']) > 0:
+            return moves['undesirable_moves_one']
+        return moves['undesirable_moves_two']
 
     def talk_shit(troll_move, board):
         piece_lvl = {
