@@ -6,7 +6,33 @@
   </div>
 </div>
 
-<input type="button" id="startPositionBtn" value="new game" />
+<script>
+function reloadChat(trollspeak) {
+    $(function(){
+        $("#chatbox").typed({
+            strings: [trollspeak],
+            typeSpeed: 0,
+            showCursor: false,
+        });
+    });
+}
+
+reloadChat('{{ user.trollspeak }}');
+</script>
+
+<div class="row">
+    <div id="chatbox" class="small-12 columns card-section">
+    </div>
+    <div class="small-12 columns">
+        {% if not request.authenticated_userid %}   
+        Please <a href="{{ request.route_url('login') }}">log in</a>...
+        {% else %}
+        <input type="button" class="button hollow" id="talkSmackBtn" value="Talk Sh*t" />
+        
+        <input type="button" class="button hollow" id="startPositionBtn" value="Give Up" />
+        {% endif %}
+    </div>
+</div>
 
 <script>
 var game = new Chess('{{ py_board }}');
@@ -82,7 +108,6 @@ var onSnapEnd = function() {
             board: window.game.fen()
         },
         success: function() {
-            console.log("we made a move and it saved!")
             get_board('{{ request.authenticated_userid }}')
         }
     });
@@ -94,6 +119,8 @@ function get_board(user) {
         url: user + '/api',
         success: function() {
             stuff = user_response.responseJSON;
+            trollspeak = stuff.trollspeak;
+            reloadChat(trollspeak);
             render_board(stuff.board)
             game = new Chess(stuff.board);
             game.in_check()
@@ -105,6 +132,7 @@ function render_board(fen) {
     var cfg = {
         position: fen,
         draggable: true,
+        moveSpeed: 350,
         onDragStart: onDragStart,
         onDrop: onDrop,
         onSnapEnd: onSnapEnd,
@@ -124,4 +152,5 @@ function render_board(fen) {
 
 render_board('{{ py_board }}')
 </script>
+
 {% endblock %}

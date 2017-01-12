@@ -5,22 +5,25 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Chess{% endblock %} - TrollPy</title>
+    <link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/foundation.css">
     <link rel="stylesheet" href="/static/css/app.css">
     <link rel="stylesheet" href="/static/css/chessboard.css">
+    <link rel="stylesheet" href="/static/css/typewriter.css">
     <script src="/static/js/chessboard.js"></script>
     <script src="/static/js/vendor/jquery.js"></script>
+    <script src="/static/js/vendor/typed.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
 </head>
 
 <body>
 
     <div class="row">
-        <div class="medium-6 columns">
+        <div class="medium-6 columns card-section">
             {% block body %}{% endblock %}
         </div>
-        <nav class="medium-6 columns">
-            <h1>TrollPy-Chess</h1>
+        <nav class="medium-6 columns card-section">
+            <h1>TrollPy Chess</h1>
             <ul>
                 <li>
                     <a href="{{ request.route_url('home') }}">Play</a>
@@ -32,10 +35,7 @@
                 <li>
                     <a href="{{ request.route_url('logout') }}">Log Out</a>
                 </li>
-                {% else %}            
-                <li>
-                    <a href="{{ request.route_url('registration') }}">Register</a>
-                </li>
+                {% else %}
                 <li>
                     <a href="{{ request.route_url('login') }}">Log In</a>
                 </li>
@@ -44,6 +44,9 @@
         </nav>
     </div>
 
+    <footer class="footer card-section">
+        &copy; <script>document.write(new Date().getFullYear())</script> TrollPy
+    </footer>
 
 
     <script src="/static/js/vendor/what-input.js"></script>

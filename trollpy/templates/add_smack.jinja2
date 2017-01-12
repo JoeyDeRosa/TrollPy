@@ -11,4 +11,12 @@
         </p>
         <input type="submit" value="submit"/>
     </form>
+    <ul>
+    {% for killscore in killscore %}
+        <li>{{ killscore.statement }}
+            (Level: {{ killscore.killscore_id }})
+            <a href="/delete/{{ killscore.id }}">Delete</a>
+        </li>
+    {% endfor %}
+    </ul>
 {% endblock %}
