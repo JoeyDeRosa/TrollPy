@@ -30,6 +30,10 @@ lib64
 pip-selfcheck.json
 pyvenv.cfg
 share/
+/env
+/env2
+env/
+env2/
 
 
 # PyInstaller
