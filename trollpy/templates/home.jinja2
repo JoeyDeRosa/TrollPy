@@ -101,6 +101,11 @@ var onMouseoutSquare = function(square, piece) {
 
 var onSnapEnd = function() {
     board.position(game.fen());
+    if (game.in_checkmate()) {
+        reloadChat('You Win')
+    } else if (game.in_draw()) {
+        reloadChat('Game In Draw')
+    }
     $.ajax({
         type: 'POST',
         url: '/{{ request.authenticated_userid }}/move',
@@ -120,10 +125,17 @@ function get_board(user) {
         success: function() {
             stuff = user_response.responseJSON;
             trollspeak = stuff.trollspeak;
-            reloadChat(trollspeak);
-            render_board(stuff.board)
             game = new Chess(stuff.board);
-            game.in_check()
+            render_board(stuff.board)
+            if (game.in_checkmate()) {
+                reloadChat('You Lose Bitch')
+            } else if (game.in_check()) {
+                reloadChat('You in check Bitch')
+            } else if (game.in_draw()) {
+                reloadChat('Game In Draw')
+            } else {
+                reloadChat(trollspeak);
+            }
         }
     });
 }
