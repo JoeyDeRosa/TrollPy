@@ -38,7 +38,7 @@ def registration_view(request):
         request.dbsession.add(new_user)
         auth_head = remember(request, new_name)
         return HTTPFound(request.route_url('profile', userid=new_name), headers=auth_head)
-    return {}
+    return {"user": None}
 
 
 @view_config(route_name='login', renderer='../templates/login.jinja2')
@@ -51,7 +51,7 @@ def login_view(request):
         if check_credentials(request):
             auth_head = remember(request, request.POST["username"])
             return HTTPFound(request.route_url('home'), headers=auth_head)
-    return {}
+    return {"user": None}
 
 
 @view_config(route_name='logout')
@@ -76,7 +76,7 @@ def add_smack(request):
         )
         request.dbsession.add(new_killscore)
         return HTTPFound(request.route_url('add_smack'))
-    return {}
+    return {"user": None}
 
 
 @view_config(route_name='api_smack', renderer='json')
@@ -99,7 +99,7 @@ def make_move(request):
         theuserid = request.matchdict['userid']
         board = request.POST['board']
         user = request.dbsession.query(User).filter_by(username=theuserid)
-        board_winner = users_game(board, request)
+        board_winner = users_game(board, request, theuserid)
         if not board_winner[1]:
             user.update({'winner': board_winner[1], 'board': board_winner[0]})
         user.update({'board': board_winner[0]})
