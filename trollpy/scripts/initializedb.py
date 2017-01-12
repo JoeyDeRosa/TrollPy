@@ -41,7 +41,7 @@ def main(argv=sys.argv):
     Base.metadata.create_all(engine)
 
     session_factory = get_session_factory(engine)
-        with transaction.manager:
+    with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
         for entry in trash_talk:
             entries = KillScore(killscore_id=entry["killscore_id"], statement=entry["statement"])
