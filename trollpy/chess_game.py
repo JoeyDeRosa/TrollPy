@@ -34,6 +34,8 @@ def users_game(user_board, request):
     def troll(board):
         """Generate a move for the troll."""
         moves = {
+            'prioritize_king_one': [],
+            'prioritize_king_two': [],
             'high_priority_moves': [],
             'med_priority_moves': [],
             'low_priority_moves': [],
@@ -50,16 +52,30 @@ def users_game(user_board, request):
                 if board.is_attacked_by(chess.WHITE, move.to_square):
                     moves['med_priority_moves'].append(move)
                 else:
-                    moves['high_priority_moves'].append(move)
+                    board.push(move)
+                    if board.is_check():
+                        board.pop()
+                        moves['prioritize_king_one'].append(move)
+                    else:
+                        moves['high_priority_moves'].append(move)
             else:
                 if board.is_attacked_by(chess.WHITE, move.to_square):
                     moves['low_priority_moves'].append(move)
                 else:
-                    moves['med_priority_moves'].append(move)
+                    board.push(move)
+                    if board.is_check():
+                        board.pop()
+                        moves['prioritize_king_two'].append(move)
+                    else:
+                        moves['med_priority_moves'].append(move)
         return moves
 
     def select_move_list(moves, board):
         """Return the list of moves with the highest priority for the troll to choose from."""
+        if len(moves['prioritize_king_one']) > 0:
+            return moves['prioritize_king_one']
+        if len(moves['prioritize_king_two']):
+            return moves['prioritize_king_two']
         if len(moves['high_priority_moves']) > 0:
             return moves['high_priority_moves']
         if len(moves['med_priority_moves']) > 0:
