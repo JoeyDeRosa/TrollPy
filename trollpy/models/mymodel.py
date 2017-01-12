@@ -21,6 +21,7 @@ class User(Base):
     board = Column(Unicode)
     winner = Column(Unicode)
     in_check = Column(Boolean)
+    trollspeak = Column(Unicode)
 
     def __init__(self, **kwargs):
         self.username = kwargs['username']
@@ -31,6 +32,7 @@ class User(Base):
         self.board = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
         self.winner = 'None'
         self.in_check = False
+        self.trollspeak = 'Prepare to die.'
 
     def to_json(self):
         return {
@@ -40,7 +42,8 @@ class User(Base):
             "email": self.email,
             "board": self.board,
             "winner": self.winner,
-            "in_check": self.in_check
+            "in_check": self.in_check,
+            "trollspeak": self.trollspeak
             }
 
 
