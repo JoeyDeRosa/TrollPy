@@ -94,7 +94,10 @@ def users_game(user_board, request, theuserid):
             'P': 1,
         }
         if board.piece_at(troll_move.to_square) is None:
-            print('Baaaadum Baaadum Badum BadumBaduBadem.')
+            trollin = request.dbsession.query(KillScore).all()
+            if trollin:
+                user = request.dbsession.query(User).filter_by(username=theuserid)
+                user.update({'trollspeak': random.choice(trollin).statement})
         else:
             print(board.piece_at(troll_move.to_square), " :piece at")
             # import pdb; pdb.set_trace()
