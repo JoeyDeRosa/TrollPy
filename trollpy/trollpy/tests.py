@@ -147,5 +147,3 @@ def test_game():
     fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
     assert not fen == users_game(fen)
 
-
-
