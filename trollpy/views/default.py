@@ -11,11 +11,13 @@ from ..chess_game import users_game
 def home_view(request):
     """Render a chessboard with the current FEN."""
     if request.authenticated_userid:
-        user = request.dbsession.query(User).filter_by(username=request.authenticated_userid).first()
+        user = request.dbsession.query(User).filter_by(
+            username=request.authenticated_userid).first()
         fen = user.board
     else:
         fen = '8/8/8/8/8/8/8/8'
-    return {"py_board": fen}
+        user = None
+    return {"py_board": fen, "user": user}
 
 
 @view_config(route_name='registration', renderer='../templates/registration.jinja2')
