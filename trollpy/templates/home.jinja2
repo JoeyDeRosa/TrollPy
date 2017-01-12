@@ -6,11 +6,29 @@
   </div>
 </div>
 
+<script>
+function reloadChat(trollspeak) {
+    $(function(){
+        $("#chatbox").typed({
+            strings: [trollspeak],
+            typeSpeed: 0,
+            showCursor: false,
+        });
+    });
+}
+
+reloadChat('{{ user.trollspeak }}');
+</script>
+
 <div class="row">
-    <div class="small-12 columns card-section">
+    <div id="chatbox" class="small-12 columns card-section">
+    </div>
+    <div class="small-12 columns">
         {% if not request.authenticated_userid %}   
         Please <a href="{{ request.route_url('login') }}">log in</a>...
         {% else %}
+        <input type="button" class="button hollow" id="talkSmackBtn" value="Talk Sh*t" />
+        
         <input type="button" class="button hollow" id="startPositionBtn" value="Give Up" />
         {% endif %}
     </div>
@@ -101,6 +119,8 @@ function get_board(user) {
         url: user + '/api',
         success: function() {
             stuff = user_response.responseJSON;
+            trollspeak = stuff.trollspeak;
+            reloadChat(trollspeak);
             render_board(stuff.board)
             game = new Chess(stuff.board);
             game.in_check()
