@@ -76,7 +76,16 @@ def add_smack(request):
         )
         request.dbsession.add(new_killscore)
         return HTTPFound(request.route_url('add_smack'))
-    return {"user": None}
+    killscore = request.dbsession.query(KillScore).all()
+    return {"user": None, "killscore": killscore}
+
+
+@view_config(route_name='del_smack')
+def del_smack(request):
+    smack_id = request.matchdict['id']
+    item_to_delete = request.dbsession.query(KillScore).get(smack_id)
+    request.dbsession.delete(item_to_delete)
+    return HTTPFound(request.route_url('add_smack'))
 
 
 @view_config(route_name='api_smack', renderer='json')
