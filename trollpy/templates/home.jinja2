@@ -7,13 +7,17 @@
 </div>
 
 <script>
+function reloadChat(trollspeak) {
     $(function(){
         $("#chatbox").typed({
-            strings: ["{{ user.trollspeak }}"],
+            strings: [trollspeak],
             typeSpeed: 0,
             showCursor: false,
         });
     });
+}
+
+reloadChat('{{ user.trollspeak }}');
 </script>
 
 <div class="row">
@@ -115,6 +119,8 @@ function get_board(user) {
         url: user + '/api',
         success: function() {
             stuff = user_response.responseJSON;
+            trollspeak = stuff.trollspeak;
+            reloadChat(trollspeak);
             render_board(stuff.board)
             game = new Chess(stuff.board);
             game.in_check()
