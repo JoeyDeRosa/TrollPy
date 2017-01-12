@@ -30,7 +30,8 @@ html {
      * Remove the margin in all browsers (opinionated).
      */
 body {
-  margin: 0; }
+  margin: 0;
+}
 
 /**
      * Add the correct display in IE 9-.
@@ -438,6 +439,7 @@ body {
   margin: 0;
   padding: 0;
   background: #fefefe;
+  background-image: url("/static/img/troll-pattern.png");
   font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
   font-weight: normal;
   line-height: 1.5;
@@ -1303,8 +1305,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
-  font-style: normal;
+  font-family: 'Fredoka One', cursive;  font-style: normal;
   font-weight: normal;
   color: inherit;
   text-rendering: optimizeLegibility; }

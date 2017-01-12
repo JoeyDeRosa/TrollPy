@@ -6,7 +6,15 @@
   </div>
 </div>
 
-<input type="button" id="startPositionBtn" value="new game" />
+<div class="row">
+    <div class="small-12 columns card-section">
+        {% if not request.authenticated_userid %}   
+        Please <a href="{{ request.route_url('login') }}">log in</a>...
+        {% else %}
+        <input type="button" class="button hollow" id="startPositionBtn" value="Give Up" />
+        {% endif %}
+    </div>
+</div>
 
 <script>
 var game = new Chess('{{ py_board }}');
@@ -82,7 +90,6 @@ var onSnapEnd = function() {
             board: window.game.fen()
         },
         success: function() {
-            console.log("we made a move and it saved!")
             get_board('{{ request.authenticated_userid }}')
         }
     });
@@ -105,6 +112,7 @@ function render_board(fen) {
     var cfg = {
         position: fen,
         draggable: true,
+        moveSpeed: 350,
         onDragStart: onDragStart,
         onDrop: onDrop,
         onSnapEnd: onSnapEnd,
@@ -124,4 +132,5 @@ function render_board(fen) {
 
 render_board('{{ py_board }}')
 </script>
+
 {% endblock %}
