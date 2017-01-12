@@ -2,6 +2,7 @@
 import pytest
 import transaction
 import os
+from .chess_game import users_game
 from pyramid import testing
 from .models.meta import Base
 from .models import (
@@ -132,7 +133,19 @@ def test_profile_route(testapp, fill_the_db):
     assert 'amosboldor@gmail.com' in response.html.find_all('li')[-1].text
     assert 'Amos Boldor' in response.html.find_all('li')[-2].text
 
+
 def test_smack_api_route(testapp, fill_the_db):
     """Test smack_api to return kill_score json."""
     response = testapp.get('/smack_api', status=200)
     assert len(response.json) == 1
+
+
+# ======== GAME TESTS ===========
+
+def test_game():
+    """Test for game function works."""
+    fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    assert not fen == users_game(fen)
+
+
+
