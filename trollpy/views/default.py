@@ -99,7 +99,7 @@ def make_move(request):
         theuserid = request.matchdict['userid']
         board = request.POST['board']
         user = request.dbsession.query(User).filter_by(username=theuserid)
-        board_winner = users_game(board)
+        board_winner = users_game(board, request)
         if not board_winner[1]:
             user.update({'winner': board_winner[1], 'board': board_winner[0]})
         user.update({'board': board_winner[0]})
