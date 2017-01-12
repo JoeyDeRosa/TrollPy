@@ -22,6 +22,7 @@ class User(Base):
     winner = Column(Unicode)
     in_check = Column(Boolean)
     trollspeak = Column(Unicode)
+    admin = Column(Boolean)
 
     def __init__(self, **kwargs):
         self.username = kwargs['username']
@@ -33,6 +34,7 @@ class User(Base):
         self.winner = 'None'
         self.in_check = False
         self.trollspeak = 'Prepare to die.'
+        self.admin=kwargs['admin']
 
     def to_json(self):
         return {

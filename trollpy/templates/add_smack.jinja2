@@ -1,5 +1,6 @@
 {% extends "layout.jinja2" %}
 {% block body %}
+{% if user.admin %}
     <form method="POST">
         <p>
             <label for="statement">Alexa will say this: </label>
@@ -19,4 +20,8 @@
         </li>
     {% endfor %}
     </ul>
+{% else %}
+<p>You must be an admin to view this page.</p>
+<p>Admin Status: {{ user.admin }}
+{% endif %}
 {% endblock %}

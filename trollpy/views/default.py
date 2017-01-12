@@ -3,6 +3,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
 from ..models import User, KillScore
 from ..security import check_credentials
+from passlib.apps import custom_app_context as pwd_context
 
 from ..chess_game import users_game
 
@@ -33,7 +34,8 @@ def registration_view(request):
             password=request.POST["password"],
             first_name=request.POST["first_name"],
             last_name=request.POST["last_name"],
-            email=request.POST["email"]
+            email=request.POST["email"],
+            admin=False
         )
         request.dbsession.add(new_user)
         auth_head = remember(request, new_name)
@@ -64,11 +66,23 @@ def logout_view(request):
 def profile_view(request):
     theuserid = request.matchdict['userid']
     the_user = request.dbsession.query(User).filter_by(username=theuserid).first()
+    if request.method == 'POST' and request.POST:
+        the_user.password = pwd_context.hash(request.POST["password"])
+        the_user.first_name = request.POST["first_name"]
+        the_user.last_name = request.POST["last_name"]
+        the_user.email = request.POST["email"]
+        return HTTPFound(request.route_url('profile', userid=theuserid))
     return {"user": the_user}
 
 
 @view_config(route_name='add_smack', renderer='../templates/add_smack.jinja2')
 def add_smack(request):
+    """Add smack talk to the DB."""
+    if request.authenticated_userid:
+        user = request.dbsession.query(User).filter_by(
+            username=request.authenticated_userid).first()
+    else:
+        user = None
     if request.method == "POST" and request.POST:
         new_killscore = KillScore(
             killscore_id=request.POST['killscore_id'],
@@ -77,7 +91,7 @@ def add_smack(request):
         request.dbsession.add(new_killscore)
         return HTTPFound(request.route_url('add_smack'))
     killscore = request.dbsession.query(KillScore).all()
-    return {"user": None, "killscore": killscore}
+    return {"user": user, "killscore": killscore}
 
 
 @view_config(route_name='del_smack')
