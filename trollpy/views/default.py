@@ -33,7 +33,8 @@ def registration_view(request):
             password=request.POST["password"],
             first_name=request.POST["first_name"],
             last_name=request.POST["last_name"],
-            email=request.POST["email"]
+            email=request.POST["email"],
+            admin=False
         )
         request.dbsession.add(new_user)
         auth_head = remember(request, new_name)
@@ -69,6 +70,12 @@ def profile_view(request):
 
 @view_config(route_name='add_smack', renderer='../templates/add_smack.jinja2')
 def add_smack(request):
+    """Add smack talk to the DB."""
+    if request.authenticated_userid:
+        user = request.dbsession.query(User).filter_by(
+            username=request.authenticated_userid).first()
+    else:
+        user = None
     if request.method == "POST" and request.POST:
         new_killscore = KillScore(
             killscore_id=request.POST['killscore_id'],
@@ -77,7 +84,7 @@ def add_smack(request):
         request.dbsession.add(new_killscore)
         return HTTPFound(request.route_url('add_smack'))
     killscore = request.dbsession.query(KillScore).all()
-    return {"user": None, "killscore": killscore}
+    return {"user": user, "killscore": killscore}
 
 
 @view_config(route_name='del_smack')
