@@ -57,6 +57,7 @@ def users_game(user_board, request):
                         board.pop()
                         moves['prioritize_king_one'].append(move)
                     else:
+                        board.pop()
                         moves['high_priority_moves'].append(move)
             else:
                 if board.is_attacked_by(chess.WHITE, move.to_square):
@@ -67,6 +68,7 @@ def users_game(user_board, request):
                         board.pop()
                         moves['prioritize_king_two'].append(move)
                     else:
+                        board.pop()
                         moves['med_priority_moves'].append(move)
         return moves
 
@@ -74,7 +76,7 @@ def users_game(user_board, request):
         """Return the list of moves with the highest priority for the troll to choose from."""
         if len(moves['prioritize_king_one']) > 0:
             return moves['prioritize_king_one']
-        if len(moves['prioritize_king_two']):
+        if len(moves['prioritize_king_two']) > 0:
             return moves['prioritize_king_two']
         if len(moves['high_priority_moves']) > 0:
             return moves['high_priority_moves']
