@@ -1,3 +1,0 @@
-[run]
-source = trollpy
-omit = trollpy/test*
