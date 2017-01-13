@@ -40,15 +40,17 @@
                     <a href="{{ request.route_url('login') }}">Log In</a>
                 </li>
                 {% endif %}
+                </ul>
                 {% if user.admin %}
+                <ul><b><u>Admin Stuff</u></b>
                 <li>
                     <a href="{{ request.route_url('add_smack') }}">Edit Smack DB</a>
                 </li>
                 <li>
                     <a href="{{ request.route_url('userlist') }}">User List</a>
                 </li>
+                </ul>
                 {% endif %}
-            </ul>
         </nav>
     </div>
 
