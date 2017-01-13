@@ -34,6 +34,7 @@ share/
 /env2
 env/
 env2/
+*.mp3
 
 
 # PyInstaller

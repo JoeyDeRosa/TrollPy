@@ -4,6 +4,7 @@
 import chess
 import random
 from .models import KillScore, User
+from gtts import gTTS
 
 
 def users_game(user_board, request, theuserid):
@@ -151,7 +152,8 @@ def users_game(user_board, request, theuserid):
             trollin = request.dbsession.query(KillScore).all()
             if trollin:
                 user = request.dbsession.query(User).filter_by(username=theuserid)
-                user.update({'trollspeak': random.choice(trollin).statement})
+                statement = random.choice(trollin).statement
+                user.update({'trollspeak': statement})
         else:
             print(board.piece_at(troll_move.to_square), " :piece at")
             # import pdb; pdb.set_trace()

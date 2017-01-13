@@ -9,6 +9,7 @@ def includeme(config):
     config.add_route('api_smack', '/smack_api')
     config.add_route('api_user', '/{userid:[\d\w]+}/api')
     config.add_route('make_move', '/{userid:[\d\w]+}/move')
+    config.add_route('mp3', '/mp3/{id:\d+}')
     config.add_route('del_smack', '/delete/{id:[\d]+}')
     config.add_route('userlist', '/userlist')
     config.add_route('del_user', '/delete_user/{userid:[\d\w]+}')

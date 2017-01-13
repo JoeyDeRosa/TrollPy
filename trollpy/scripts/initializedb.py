@@ -1,6 +1,7 @@
 import os
 import sys
 import transaction
+from gtts import gTTS
 
 from pyramid.paster import (
     get_appsettings,
@@ -15,6 +16,7 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     KillScore,
+    Audio,
     User,
     )
 
@@ -47,5 +49,14 @@ def main(argv=sys.argv):
         for entry in trash_talk:
             entries = KillScore(killscore_id=entry["killscore_id"], statement=entry["statement"])
             dbsession.add(entries)
-        new_user = User(username="copenbacon", password="password", first_name="sdfas", last_name="fadfasd", email="sadfjsad@sdfjas;", admin=True)
-        dbsession.add(new_user)
+        for entry in dbsession.query(KillScore).all():
+            tts = gTTS(text=entry.statement, lang='en')
+            tts.save("hello.mp3")
+            current_place = os.path.dirname(os.path.abspath(__file__))[:-15] + 'hello.mp3'
+            print(current_place)
+            with open(current_place, 'rb') as a:
+                data = a.read()
+            mp3 = Audio(id=entry.id, binary_file=data)
+            dbsession.add(mp3)
+
+
