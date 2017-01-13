@@ -82,9 +82,12 @@ def profile_view(request):
     if request.method == 'POST' and request.POST:
         if request.POST["password"] != '':
             profile.password = pwd_context.hash(request.POST["password"])
-        profile.first_name = request.POST["first_name"]
-        profile.last_name = request.POST["last_name"]
-        profile.email = request.POST["email"]
+        if profile.first_name != '':
+            profile.first_name = request.POST["first_name"]
+        if profile.last_name != '':
+            profile.last_name = request.POST["last_name"]
+        if profile.email != '':
+            profile.email = request.POST["email"]
         return HTTPFound(request.route_url('profile', userid=theuserid))
     return {"profile": profile, "user": user}
 

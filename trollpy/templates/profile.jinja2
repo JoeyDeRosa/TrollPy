@@ -21,7 +21,7 @@
 <script>
  $(function(){
         $('#editprofile').click(function() {
-            $('#editform').append('<p><label for="password">New Password: </label><input type="password" name="password" /></p><p><label for="first_name">First Name: </label><input type="text" name="first_name" value="{{ profile.first_name }}" required/></p><p><label for="last_name">Last Name: </label><input type="text" name="last_name" value="{{ profile.last_name }}" required/></p><p><label for="email">Email: </label><input type="email" name="email" value="{{ profile.email }}" required/></p><input type="submit" class="button hollow" value="Submit"/>');
+            $('#editform').append('<p><label for="password">New Password: </label><input type="password" name="password"/></p><p><label for="first_name">First Name: </label><input type="text" name="first_name" value="{{ profile.first_name }}"/></p><p><label for="last_name">Last Name: </label><input type="text" name="last_name" value="{{ profile.last_name }}"/></p><p><label for="email">Email: </label><input type="email" name="email" value="{{ profile.email }}"/></p><input type="submit" class="button hollow" value="Submit"/>');
         });
     });
 </script>
