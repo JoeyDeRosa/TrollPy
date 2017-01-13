@@ -40,7 +40,11 @@ def registration_view(request):
         request.dbsession.add(new_user)
         auth_head = remember(request, new_name)
         return HTTPFound(request.route_url('profile', userid=new_name), headers=auth_head)
-    return {"user": None}
+    if request.authenticated_userid:
+        return HTTPFound(request.route_url('profile', userid=request.authenticated_userid))
+    else:
+        user = None
+    return {"user": user}
 
 
 @view_config(route_name='login', renderer='../templates/login.jinja2', permission='view', require_csrf=False)
@@ -53,7 +57,11 @@ def login_view(request):
         if check_credentials(request):
             auth_head = remember(request, request.POST["username"])
             return HTTPFound(request.route_url('home'), headers=auth_head)
-    return {"user": None}
+    if request.authenticated_userid:
+        return HTTPFound(request.route_url('profile', userid=request.authenticated_userid))
+    else:
+        user = None
+    return {"user": user}
 
 
 @view_config(route_name='logout', require_csrf=False)
