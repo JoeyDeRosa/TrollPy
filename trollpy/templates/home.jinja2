@@ -128,9 +128,9 @@ function get_board(user) {
             game = new Chess(stuff.board);
             render_board(stuff.board)
             if (game.in_checkmate()) {
-                reloadChat('You Lose Bitch')
+                reloadChat('You lose')
             } else if (game.in_check()) {
-                reloadChat('You in check Bitch')
+                reloadChat('You in check foo')
             } else if (game.in_draw()) {
                 reloadChat('Game In Draw')
             } else {

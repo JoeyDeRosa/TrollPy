@@ -1,3 +1,6 @@
+"""Initialize the models."""
+
+
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import configure_mappers
@@ -13,10 +16,12 @@ configure_mappers()
 
 
 def get_engine(settings, prefix='sqlalchemy.'):
+    """Get the SQL engine."""
     return engine_from_config(settings, prefix)
 
 
 def get_session_factory(engine):
+    """Get the session factory."""
     factory = sessionmaker()
     factory.configure(bind=engine)
     return factory

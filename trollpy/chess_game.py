@@ -4,7 +4,6 @@
 import chess
 import random
 from .models import KillScore, User
-from gtts import gTTS
 
 
 def users_game(user_board, request, theuserid):
@@ -65,7 +64,8 @@ def users_game(user_board, request, theuserid):
                     if not board.is_attacked_by(chess.WHITE, move.to_square):
                         if board.piece_at(move.from_square).symbol() == 'q':
                             moves['protect_queen_moves'].append(move)
-                        if not board.piece_at(move.from_square).symbol() == 'p':
+                        if not board.piece_at(
+                                move.from_square).symbol() == 'p':
                             moves['runaway_moves'].append(move)
                 if board.is_capture(move):
                     board.push(move)
@@ -116,7 +116,7 @@ def users_game(user_board, request, theuserid):
         return moves
 
     def select_move_list(moves, board):
-        """Return the list of moves with the highest priority for the troll to choose from."""
+        """Return the list of moves with the highest priority."""
         if len(moves['checkmate_moves']) > 0:
             return moves['checkmate_moves']
         if len(moves['capture_queen_moves']) > 0:
@@ -151,23 +151,28 @@ def users_game(user_board, request, theuserid):
         if board.piece_at(troll_move.to_square) is None:
             trollin = request.dbsession.query(KillScore).all()
             if trollin:
-                user = request.dbsession.query(User).filter_by(username=theuserid)
+                user = request.dbsession.query(User).filter_by(
+                    username=theuserid
+                )
                 statement = random.choice(trollin).statement
                 user.update({'trollspeak': statement})
         else:
             print(board.piece_at(troll_move.to_square), " :piece at")
-            # import pdb; pdb.set_trace()
 
-            piece_taken = str(board.piece_at(troll_move.to_square).symbol()).upper()
-            piece_moved = str(board.piece_at(troll_move.from_square).symbol()).upper()
+            piece_taken = str(board.piece_at(
+                              troll_move.to_square).symbol()).upper()
+            piece_moved = str(board.piece_at(
+                              troll_move.from_square).symbol()).upper()
             print(piece_taken, piece_moved)
 
             lvl = piece_lvl[piece_moved] - piece_lvl[piece_taken]
             print(lvl)
-            shit_talk = request.dbsession.query(KillScore).filter_by(killscore_id=lvl).all()
+            shit_talk = request.dbsession.query(
+                KillScore).filter_by(killscore_id=lvl).all()
             if shit_talk:
                 print(random.choice(shit_talk).statement)
-                user = request.dbsession.query(User).filter_by(username=theuserid)
+                user = request.dbsession.query(
+                    User).filter_by(username=theuserid)
                 user.update({'trollspeak': random.choice(shit_talk).statement})
     troll_move = game(user_board)
     return (troll_move, winner)

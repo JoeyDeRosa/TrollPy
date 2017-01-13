@@ -1,4 +1,6 @@
-# security.py
+"""Security."""
+
+
 import os
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
@@ -22,6 +24,7 @@ class NewRoot(object):
 
 
 def check_credentials(request):
+    """Check user credentials."""
     if "username" in request.POST and "password" in request.POST:
         username = request.POST['username']
         password = request.POST['password']
@@ -34,7 +37,7 @@ def check_credentials(request):
 
 
 def includeme(config):
-    """security-related configuration"""
+    """Security-related configuration."""
     auth_secret = os.environ.get('AUTH_SECRET', 'itsaseekrit')
     authn_policy = AuthTktAuthenticationPolicy(
         secret=auth_secret,

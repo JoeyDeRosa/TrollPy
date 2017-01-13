@@ -306,7 +306,6 @@ def test_del_smack(testapp, fill_the_db):
 
 def test_user_board_json(testapp, fill_the_db):
     """Test that get user board gets current chess board."""
-    # import pdb; pdb.set_trace()
     board = testapp.get('/amos/api', status=200).json['board']
     assert board == 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
