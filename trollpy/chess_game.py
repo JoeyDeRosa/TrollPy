@@ -3,10 +3,10 @@
 
 import chess
 import random
-from .models import KillScore
+from .models import KillScore, User
 
 
-def users_game(user_board, request):
+def users_game(user_board, request, theuserid):
     """The game for the specific user."""
     winner = None
 
@@ -148,7 +148,10 @@ def users_game(user_board, request):
             'P': 1,
         }
         if board.piece_at(troll_move.to_square) is None:
-            print('Baaaadum Baaadum Badum BadumBaduBadem.')
+            trollin = request.dbsession.query(KillScore).all()
+            if trollin:
+                user = request.dbsession.query(User).filter_by(username=theuserid)
+                user.update({'trollspeak': random.choice(trollin).statement})
         else:
             print(board.piece_at(troll_move.to_square), " :piece at")
             # import pdb; pdb.set_trace()
@@ -162,5 +165,7 @@ def users_game(user_board, request):
             shit_talk = request.dbsession.query(KillScore).filter_by(killscore_id=lvl).all()
             if shit_talk:
                 print(random.choice(shit_talk).statement)
+                user = request.dbsession.query(User).filter_by(username=theuserid)
+                user.update({'trollspeak': random.choice(shit_talk).statement})
     troll_move = game(user_board)
     return (troll_move, winner)
