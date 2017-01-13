@@ -99,18 +99,6 @@ def fill_the_db(testapp):
 
 # ======== UNIT TESTS ==========
 
-
-# def test_registration_view(dummy_post_request):
-#     """Test that adding a user adds a new user to the database."""
-#     from .views.default import registration_view
-#     dummy_post_request.POST["username"] = 'dude'
-#     dummy_post_request.POST["password"] = 'password'
-#     dummy_post_request.POST["first_name"] = 'dude'
-#     dummy_post_request.POST["last_name"] = 'mcklovine'
-#     dummy_post_request.POST["email"] = 'asdas@gmas.com'
-#     registration_view(dummy_post_request)
-#     assert dummy_post_request.dbsession.query(User).filter_by(username='dude').first_name()
-
 # ======== FUNCTIONAL TESTS ===========
 
 
@@ -326,4 +314,27 @@ def test_user_list(testapp, fill_the_db):
     csrf = testapp.get('/add_smack').html.find_all("input")
     csrf = csrf[0].attrs['value']
     html_user = testapp.get('/userlist', params={'csrf_token': csrf}, status=200).html.find_all('td')
-    assert '<td><b>amosboldor@gmail.com</b></td>' == str(html_user[1])
+    assert '<td colspan="2"><b>True</b></td>' == str(html_user[1])
+
+
+def test_del_user(testapp, fill_the_db):
+    """Test deleting a user from db."""
+    user = {
+        'username': 'dude',
+        'password': 'password',
+        'first_name': 'dude',
+        'last_name': 'asdasd',
+        'email': 'goyour@skdgmsk',
+
+    }
+    testapp.post('/registration', user, status=302)
+    testapp.get('/logout', status=302)
+    testapp.post('/login',
+             params={'username': 'amos',
+                     'password': 'password'})
+    csrf = testapp.get('/add_smack').html.find_all("input")
+    csrf = csrf[0].attrs['value']
+    testapp.get('/delete_user/2', params={
+               'csrf_token': csrf})
+    html_user = testapp.get('/userlist', params={'csrf_token': csrf}, status=200).html.find_all('td')
+    assert '<td colspan="2"><b>True</b></td>' == str(html_user[1])
