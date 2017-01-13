@@ -62,10 +62,10 @@ def users_game(user_board, request, theuserid):
                 board.pop()
                 if board.is_attacked_by(chess.WHITE, move.from_square):
                     if not board.is_attacked_by(chess.WHITE, move.to_square):
-                        if str(board.piece_at(move.to_square).symbol()).upper() == 'Q':
+                        if board.piece_at(move.from_square).symbol() == 'q':
                             moves['protect_queen_moves'].append(moves)
-                        else:
-                            moves['runaway_moves'].append(moves)
+                        if not board.piece_at(move.from_square).symbol() == 'p':
+                            moves['runaway_moves'].append(move)
                 if board.is_capture(move):
                     board.push(move)
                     for next_move in board.legal_moves:
@@ -78,8 +78,8 @@ def users_game(user_board, request, theuserid):
                     board.pop()
                     if move not in moves['undesirable_moves_one']:
                         if board.is_attacked_by(chess.WHITE, move.to_square):
-                            if str(board.piece_at(move.to_square).symbol()).upper() == 'Q':
-                                if str(board.piece_at(move.from_square).symbol()).upper() != 'Q':
+                            if board.piece_at(move.to_square) == 'Q':
+                                if board.piece_at(move.from_square) != 'Q':
                                     moves['capture_queen_moves'].append(move)
                             else:
                                 moves['med_priority_moves'].append(move)
