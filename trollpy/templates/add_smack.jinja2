@@ -2,7 +2,7 @@
 {% block body %}
 {% if user.admin %}
     <form method="POST">
-        <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
+        <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}"/>
         <p>
             <label for="statement">Trollpy will say this: </label>
             <input type="text" name="statement"/>

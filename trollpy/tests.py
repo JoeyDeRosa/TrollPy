@@ -72,7 +72,6 @@ def testapp():
 
     app = main({}, **{'sqlalchemy.url': os.environ["DATABASE_URL"]})
     testapp = TestApp(app)
-
     session_factory = app.registry["dbsession_factory"]
     engine = session_factory().bind
     Base.metadata.drop_all(bind=engine)
@@ -91,7 +90,8 @@ def fill_the_db(testapp):
                     password='password',
                     first_name='Amos',
                     last_name='Boldor',
-                    email='amosboldor@gmail.com')
+                    email='amosboldor@gmail.com',
+                    admin=True)
         kill_score = KillScore(killscore_id='-8',
                                statement='You live because I allowed it.')
         dbsession.add(kill_score)
@@ -145,6 +145,17 @@ def test_logout(testapp):
     assert response.html.find_all('a')[0].text == 'log in'
 
 
+def test_registration_view_when_logged_in(testapp):
+    """Test that registration view when logged in redirects."""
+    testapp.post('/login',
+                 params={'username': 'amos',
+                         'password': 'password'})
+    import pdb; pdb.set_trace()
+    response = testapp.get('/registration').follow()
+    assert 'amosboldor@gmail.com' in response.html.find_all('li')[2].text
+    assert 'Amos Boldor' in response.html.find_all('li')[1].text
+
+
 def test_registration_show_form(testapp):
     """Test that the registration route shows form."""
     response = testapp.get('/login', status=200)
@@ -175,26 +186,57 @@ def test_new_user(testapp):
         'password': 'password',
         'first_name': 'dude',
         'last_name': 'asdasd',
-        'email': 'gofuckyour@skdgmsk',
+        'email': 'goyour@skdgmsk',
 
     }
     html = testapp.post('/registration', user, status=302).follow().html
-    assert 'gofuckyour@skdgmsk' in html.find_all('li')[2].text
+    assert 'goyour@skdgmsk' in html.find_all('li')[2].text
     assert 'dude asdasd' in html.find_all('li')[1].text
 
 
-def test_add_smack(testapp):
+def test_new_user_with_spaces(testapp):
+    """Test that adding a new user via registration page."""
+    user = {
+        'username': 'dude mclovin',
+        'password': 'password',
+        'first_name': 'dude',
+        'last_name': 'asdasd',
+        'email': 'goyour@skdgmsk2',
+
+    }
+    html = testapp.post('/registration', user, status=302).follow().html
+    assert 'goyour@skdgmsk2' in html.find_all('li')[2].text
+    assert 'dude asdasd' in html.find_all('li')[1].text
+
+
+def test_add_smack(testapp, fill_the_db):
     """Test that add_smack route shows form."""
+    testapp.post('/login',
+                 params={'username': 'amos',
+                         'password': 'password'})
     response = testapp.get('/add_smack', status=200)
     assert len(response.html.find_all('form')) == 1
 
 
-def test_add_smack_post(testapp):
+def test_add_smack_with_no_user(testapp, fill_the_db):
+    """Test that add_smack route shows 403."""
+    assert testapp.get('/add_smack', status=403)
+    
+
+def test_add_smack_post(testapp, fill_the_db):
     """Test adding smack to db."""
+    testapp.post('/login',
+                 params={'username': 'amos',
+                         'password': 'password'})
     kill_score = {'killscore_id': -1, 'statement': 'aosidnaosidj'}
-    testapp.post('/add_smack', kill_score, status=302)
+    csrf = testapp.get('/add_smack').html.find_all("input")
+    csrf = csrf[0].attrs['value']
+    testapp.post('/add_smack', params={
+            'killscore_id': -1,
+            'statement': 'aosidnaosidj',
+            'csrf_token': csrf}, status=302)
     assrtion = testapp.get('/smack_api', status=200)
-    assert kill_score['statement'] == assrtion.json[0]['statement']
+    assert kill_score['statement'] == assrtion.json[-1]['statement']
 
 
 def test_user_board_json(testapp, fill_the_db):

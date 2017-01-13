@@ -47,3 +47,5 @@ def main(argv=sys.argv):
         for entry in trash_talk:
             entries = KillScore(killscore_id=entry["killscore_id"], statement=entry["statement"])
             dbsession.add(entries)
+        new_user = User(username="copenbacon", password="password", first_name="sdfas", last_name="fadfasd", email="sadfjsad@sdfjas;", admin=True)
+        dbsession.add(new_user)
