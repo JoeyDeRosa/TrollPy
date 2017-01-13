@@ -10,7 +10,9 @@
 
 <input type="button" class="button hollow" id="editprofile" value="Change Profile Settings"/>
 
-<form method="POST" id="editform"></form>
+<form method="POST" id="editform">
+    <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
+</form>
 
 <script>
  $(function(){
