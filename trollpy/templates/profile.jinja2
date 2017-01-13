@@ -5,7 +5,9 @@
     <li>Username: {{user.username}}</li>
     <li>Name: {{user.first_name}} {{user.last_name}}</li>
     <li>Email: <a href="mailto:{{user.email}}">{{user.email}}</a></li>
+    {% if user.admin %}
     <li>Admin Status: {{ user.admin }}</li>
+    {% endif %}
 </ul>
 
 <input type="button" class="button hollow" id="editprofile" value="Change Profile Settings"/>
