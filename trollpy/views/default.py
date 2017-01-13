@@ -144,7 +144,7 @@ def make_move(request):
 
 
 @view_config(route_name='userlist',
-             permission="view",
+             permission="add",
              renderer='../templates/userlist.jinja2',
              require_csrf=True)
 def user_list(request):

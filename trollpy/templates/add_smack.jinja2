@@ -14,15 +14,17 @@
         <input type="submit" value="submit"/>
     </form>
     <ul>
+    <table>
+    <th>Level</th><th>Phrase</th>
     {% for killscore in killscore %}
-        <li>{{ killscore.statement }}
-            (Level: {{ killscore.killscore_id }})
-            <a href="/delete/{{ killscore.id }}">Delete</a>
-        </li>
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}</td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
 {% else %}
 <p>You must be an admin to view this page.</p>
-<p>Admin Status: {{ user.admin }}
 {% endif %}
 {% endblock %}

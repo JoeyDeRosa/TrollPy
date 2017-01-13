@@ -11,12 +11,16 @@
     <th>Admin?</th>
     {% for user in users %}
         <tr>
-        {% if user.admin %}
-            <td><a href="/profile/{{user.username}}">{{ user.username }}</a></td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.admin }}</td>
-        {% else %}
-            <td><a href="/profile/{{user.username}}">{{ user.username }}</a></td>
+        {% if user.admin == True %}
+            <td><b><a href="/profile/{{ user.username }}">{{ user.username }}</a></b></td>
+            <td><b>{{ user.email }}</b></td>
+            <td><b>{{ user.admin }}</b></td>
+        {% endif %}
+        </tr>
+    {% endfor %}
+    {% for user in users %}
+        {% if user.admin == False %}
+            <td><a href="/profile/{{ user.username }}">{{ user.username }}</a></td>
             <td>{{ user.email }}</td>
             <td>{{ user.admin }}</td>
         {% endif %}
@@ -26,6 +30,5 @@
 
 {% else %}
 <p>You must be an admin to view this page.</p>
-<p>Admin Status: {{ user.admin }}
 {% endif %}
 {% endblock %}
