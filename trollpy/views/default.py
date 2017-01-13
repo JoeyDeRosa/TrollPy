@@ -156,3 +156,11 @@ def user_list(request):
         user = None
     users = request.dbsession.query(User).all()
     return {"users": users, "user": user}
+
+
+@view_config(route_name='del_user', permission="view", require_csrf=False)
+def del_user(request):
+    user_id = request.matchdict['userid']
+    item_to_delete = request.dbsession.query(User).get(user_id)
+    request.dbsession.delete(item_to_delete)
+    return HTTPFound(request.route_url('userlist'))

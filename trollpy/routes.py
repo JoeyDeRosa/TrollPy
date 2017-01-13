@@ -11,3 +11,4 @@ def includeme(config):
     config.add_route('make_move', '/{userid:[\d\w]+}/move')
     config.add_route('del_smack', '/delete/{id:[\d]+}')
     config.add_route('userlist', '/userlist')
+    config.add_route('del_user', '/delete_user/{userid:[\d\w]+}')
