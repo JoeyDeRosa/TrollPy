@@ -3,7 +3,8 @@ from sqlalchemy import (
     Index,
     Integer,
     Unicode,
-    Boolean
+    Boolean,
+    LargeBinary
 )
 
 from .meta import Base
@@ -44,7 +45,7 @@ class User(Base):
             "winner": self.winner,
             "in_check": self.in_check,
             "trollspeak": self.trollspeak
-            }
+        }
 
 
 class KillScore(Base):
@@ -62,4 +63,10 @@ class KillScore(Base):
             "id": self.id,
             "killscore_id": self.killscore_id,
             "statement": self.statement
-            }
+        }
+
+
+class Audio(Base):
+    __tablename__ = 'mp3'
+    id = Column(Integer, primary_key=True)
+    binary_file = Column(LargeBinary)

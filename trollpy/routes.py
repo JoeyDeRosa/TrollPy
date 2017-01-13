@@ -10,3 +10,4 @@ def includeme(config):
     config.add_route('chess_game', '/chess')
     config.add_route('api_user', '/{userid:[\d\w]+}/api')
     config.add_route('make_move', '/{userid:[\d\w]+}/move')
+    config.add_route('mp3', '/mp3/{id:\d+}')

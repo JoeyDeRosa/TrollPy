@@ -35,6 +35,8 @@ reloadChat('{{ user.trollspeak }}');
 </div>
 
 <script>
+var audio = new Audio();
+audio.controls = false;
 var game = new Chess('{{ py_board }}');
 
 var removeGreySquares = function() {
@@ -135,6 +137,9 @@ function get_board(user) {
                 reloadChat('Game In Draw')
             } else {
                 reloadChat(trollspeak);
+                console.log("http://localhost:6547/mp3/" + stuff.id)
+                audio.src = "http://localhost:6547/mp3/" + stuff.id;
+                audio.play()
             }
         }
     });

@@ -1,10 +1,12 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember, forget
-from ..models import User, KillScore
+from ..models import User, KillScore, Audio
 from ..security import check_credentials
-
+from pyramid.response import Response
 from ..chess_game import users_game
+from gtts import gTTS
+import os
 
 
 @view_config(route_name='home', renderer='../templates/home.jinja2')
@@ -75,6 +77,16 @@ def add_smack(request):
             statement=request.POST['statement']
         )
         request.dbsession.add(new_killscore)
+        mp3_id = request.dbsession.query(KillScore).filter_by(statement=request.POST['statement']).first().id
+        tts = gTTS(text=request.POST['statement'], lang='en')
+        tts.save("hello.mp3")
+        current_place = os.path.dirname(os.path.abspath(__file__))[:-13] + 'hello.mp3'
+        print(current_place)
+        with open(current_place, 'rb') as a:
+            data = a.read()
+        mp3 = Audio(id=mp3_id, binary_file=data)
+        request.dbsession.add(mp3)
+        print('mp3 id: ', mp3_id)
         return HTTPFound(request.route_url('add_smack'))
     return {"user": None}
 
@@ -90,7 +102,10 @@ def smack_json(request):
 def user_board_json(request):
     theuserid = request.matchdict['userid']
     user = request.dbsession.query(User).filter_by(username=theuserid)
-    return user.first().to_json()
+    stuff = user.first().to_json()
+    mp3_id = request.dbsession.query(KillScore).filter_by(statement=user.first().to_json()['trollspeak']).first().id
+    stuff['id'] = mp3_id
+    return stuff
 
 
 @view_config(route_name='make_move')
@@ -104,3 +119,10 @@ def make_move(request):
             user.update({'winner': board_winner[1], 'board': board_winner[0]})
         user.update({'board': board_winner[0]})
         return HTTPFound(request.route_url('home'))
+
+
+@view_config(route_name='mp3')
+def send_mp3(request):
+    mp3_id = request.matchdict['id']
+    data = request.dbsession.query(Audio).filter_by(id=mp3_id).first().binary_file
+    return Response(content_type='audio/mpeg', body=data)
