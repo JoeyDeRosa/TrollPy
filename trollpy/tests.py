@@ -9,8 +9,10 @@ from .models import (
     get_session_factory,
     get_tm_session,
     User,
-    KillScore
+    KillScore,
+    Audio
 )
+from gtts import gTTS
 
 
 @pytest.fixture(scope="function")
@@ -94,6 +96,13 @@ def fill_the_db(testapp):
                     admin=True)
         kill_score = KillScore(killscore_id='-8',
                                statement='You live because I allowed it.')
+        tts = gTTS(text='hello', lang='en')
+        tts.save("hello.mp3")
+        current_place = os.path.dirname(os.path.abspath(__file__))[:-13] + 'hello.mp3'
+        with open(current_place, 'rb') as a:
+            data = a.read()
+        mp3 = Audio(id=1, binary_file=data)
+        dbsession.add(mp3)
         dbsession.add(kill_score)
         dbsession.add(user)
 
@@ -293,6 +302,7 @@ def test_del_smack(testapp, fill_the_db):
 
 def test_user_board_json(testapp, fill_the_db):
     """Test that get user board gets current chess board."""
+    import pdb; pdb.set_trace()
     board = testapp.get('/amos/api', status=200).json['board']
     assert board == 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 

@@ -190,4 +190,5 @@ def del_user(request):
     user_id = request.matchdict['userid']
     item_to_delete = request.dbsession.query(User).get(user_id)
     request.dbsession.delete(item_to_delete)
+    return HTTPFound(request.route_url('userlist'))
 
