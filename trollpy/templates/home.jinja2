@@ -135,8 +135,7 @@ function get_board(user) {
                 reloadChat('Game In Draw')
             } else {
                 reloadChat(trollspeak);
-                console.log("http://localhost:6547/mp3/" + stuff.id)
-                audio.src = "http://localhost:6547/mp3/" + stuff.id;
+                audio.src = "http://trollpy.herokuapp.com/mp3/" + stuff.id;
                 audio.play()
             }
         }
