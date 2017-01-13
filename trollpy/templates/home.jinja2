@@ -26,9 +26,7 @@ reloadChat('{{ user.trollspeak }}');
     <div class="small-12 columns">
         {% if not request.authenticated_userid %}   
         Please <a href="{{ request.route_url('login') }}">log in</a>...
-        {% else %}
-        <input type="button" class="button hollow" id="talkSmackBtn" value="Talk Sh*t" />
-        
+        {% else %}        
         <input type="button" class="button hollow" id="startPositionBtn" value="Give Up" />
         {% endif %}
     </div>
