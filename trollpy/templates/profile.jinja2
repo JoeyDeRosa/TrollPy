@@ -10,14 +10,14 @@
     {% endif %}
 </ul>
 
-<input type="button" class="button hollow" id="editprofile" value="Change Profile Settings"/>
+<input type="button" class="button hollow" id="editprofile" value="Edit Profile"/>
 
 <form method="POST" id="editform"></form>
 
 <script>
  $(function(){
         $('#editprofile').click(function() {
-            $('#editform').append('<p><label for="password">Password: </label><input type="password" name="password" required/></p><p><label for="first_name">First Name: </label><input type="text" name="first_name" required/></p><p><label for="last_name">Last Name: </label><input type="text" name="last_name" required/></p><p><label for="email">Email: </label><input type="email" name="email" required/></p><input type="submit" class="button hollow" value="Submit"/>');
+            $('#editform').append('<p><label for="password">New Password: </label><input type="password" name="password" required/></p><p><label for="first_name">First Name: </label><input type="text" name="first_name" value="{{ user.first_name }}" required/></p><p><label for="last_name">Last Name: </label><input type="text" name="last_name" value="{{ user.last_name }}" required/></p><p><label for="email">Email: </label><input type="email" name="email" value="{{ user.email }}" required/></p><input type="submit" class="button hollow" value="Submit"/>');
         });
     });
 </script>
