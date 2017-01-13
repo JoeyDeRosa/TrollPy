@@ -91,6 +91,12 @@ def fill_the_db(testapp):
 
 # ======== UNIT TESTS ==========
 
+@pytest.fixture
+def test_all_apps(app):
+    return (routes)
+
+# ======== ROUTES TESTS ===========
+
 
 def test_registration_view(dummy_request):
     """Test that adding a user adds a new user to the database."""
