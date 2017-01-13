@@ -121,7 +121,7 @@ def users_game(user_board, request, theuserid):
         if len(moves['capture_queen_moves']) > 0:
             return moves['capture_queen_moves']
         if len(moves['protect_queen_moves']) > 0:
-            return moves['protect_queen']
+            return moves['protect_queen_moves']
         if len(moves['prioritize_king_one']) > 0:
             return moves['prioritize_king_one']
         if len(moves['prioritize_king_two']) > 0:
