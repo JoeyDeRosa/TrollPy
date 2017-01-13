@@ -129,7 +129,10 @@ def add_smack(request):
 def del_smack(request):
     smack_id = request.matchdict['id']
     item_to_delete = request.dbsession.query(KillScore).get(smack_id)
+    mp3_to_delete = request.dbsession.query(Audio).get(smack_id)
     request.dbsession.delete(item_to_delete)
+    print('\nID ', smack_id)
+    request.dbsession.delete(mp3_to_delete)
     return HTTPFound(request.route_url('add_smack'))
 
 
@@ -145,6 +148,7 @@ def user_board_json(request):
     theuserid = request.matchdict['userid']
     user = request.dbsession.query(User).filter_by(username=theuserid)
     stuff = user.first().to_json()
+    # import pdb; pdb.set_trace()
     mp3_id = request.dbsession.query(KillScore).filter_by(statement=user.first().to_json()['trollspeak']).first().id
     stuff['id'] = mp3_id
     return stuff
