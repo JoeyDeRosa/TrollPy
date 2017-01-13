@@ -10,21 +10,24 @@
     <th>Email</th>
     <th>Admin?</th>
     {% for user in users %}
-        <tr>
         {% if user.admin == True %}
-            <td><b><a href="/profile/{{ user.username }}">{{ user.username }}</a></b></td>
-            <td><b>{{ user.email }}</b></td>
-            <td><b>{{ user.admin }}</b></td>
-        {% endif %}
+        <tr>
+        <td><b><a href="/profile/{{ user.username }}">
+            {{ user.username }}
+            </a></b></td>
+        <td><b>{{ user.email }}</b></td>
+        <td><b>{{ user.admin }}</b></td>
         </tr>
+        {% endif %}
     {% endfor %}
     {% for user in users %}
         {% if user.admin == False %}
-            <td><a href="/profile/{{ user.username }}">{{ user.username }}</a></td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.admin }}</td>
-        {% endif %}
+        <tr>
+        <td><a href="/profile/{{ user.username }}">{{ user.username }}</a></td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.admin }}</td>
         </tr>
+        {% endif %}
     {% endfor %}
     </table>
 
