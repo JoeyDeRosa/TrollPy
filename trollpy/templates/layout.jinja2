@@ -30,7 +30,7 @@
                 </li>
                 {% if request.authenticated_userid %}
                 <li>
-                    Logged in as <a href="{{ request.route_url('profile', userid=request.authenticated_userid) }}">{{ user.username }}</a>
+                    Logged in as <a href="{{ request.route_url('profile', userid=request.authenticated_userid) }}">{{ request.authenticated_userid }}</a>
                 </li>
                 <li>
                     <a href="{{ request.route_url('logout') }}">Log Out</a>
