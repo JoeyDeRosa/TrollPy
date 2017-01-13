@@ -1,10 +1,12 @@
+"""Main initialization."""
+
+
 from pyramid.config import Configurator
 import os
 
 
 def main(global_config, **settings):
-    """ This function returns a Pyramid WSGI application.
-    """
+    """Return a Pyramid WSGI application."""
     settings["sqlalchemy.url"] = os.environ["DATABASE_URL"]
     config = Configurator(settings=settings)
     config.include('pyramid_jinja2')

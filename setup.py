@@ -1,3 +1,6 @@
+"""Setup."""
+
+
 import os
 
 from setuptools import setup, find_packages
@@ -23,14 +26,14 @@ requires = [
     'passlib',
     'python-chess',
     'gTTS',
-    ]
+]
 
 tests_require = [
     'WebTest >= 1.3.1',  # py3 compat
     'pytest',  # includes virtualenv
     'pytest-cov',
     'tox',
-    ]
+]
 
 setup(name='trollpy',
       version='0.0',
@@ -42,7 +45,7 @@ setup(name='trollpy',
           "Topic :: Internet :: WWW/HTTP",
           "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
       ],
-      author='Amos Boldor, Conor Clary, Joey Derosa, Regenal Grant, Benjamin Petty',
+      author='Amos Boldor,Conor Clary, Joey Derosa, Regenal Grant, Benjamin Petty',
       author_email='conor.clary@gmail.com, regenal@mac.com, amosboldor@gmail.com, joeyderosa11.jd@gmail.com, Benjamin.s.petty@gmail.com,',
       url='',
       keywords='web wsgi bfg pylons pyramid',
