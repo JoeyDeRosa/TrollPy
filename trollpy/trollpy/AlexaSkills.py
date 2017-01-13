@@ -1,12 +1,11 @@
 def lambda_handler(event, context):
-    """
-    Route the incoming request based on type (LaunchRequest, IntentRequest,
+    """Route the incoming request based on type (LaunchRequest, IntentRequest,
     etc.) The JSON body of the request is provided in the event parameter.
     """
     print("event.session.application.applicationId=" +
           event['session']['application']['applicationId'])
     if (event['session']['application']['applicationId'] !=
-           "amzn1.echo-sdk-ams.app.[unique-value-here]"):
+            "amzn1.echo-sdk-ams.app.[unique-value-here]"):
         raise ValueError("Invalid Application ID")
 
     if event['session']['new']:
