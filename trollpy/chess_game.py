@@ -63,7 +63,7 @@ def users_game(user_board, request, theuserid):
                 if board.is_attacked_by(chess.WHITE, move.from_square):
                     if not board.is_attacked_by(chess.WHITE, move.to_square):
                         if board.piece_at(move.from_square).symbol() == 'q':
-                            moves['protect_queen_moves'].append(moves)
+                            moves['protect_queen_moves'].append(move)
                         if not board.piece_at(move.from_square).symbol() == 'p':
                             moves['runaway_moves'].append(move)
                 if board.is_capture(move):
