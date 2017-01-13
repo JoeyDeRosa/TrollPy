@@ -4,7 +4,7 @@
     <form method="POST">
         <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
         <p>
-            <label for="statement">Alexa will say this: </label>
+            <label for="statement">Trollpy will say this: </label>
             <input type="text" name="statement"/>
         </p>
         <p>
@@ -14,15 +14,17 @@
         <input type="submit" value="submit"/>
     </form>
     <ul>
+    <table>
+    <th>Level</th><th>Phrase</th>
     {% for killscore in killscore %}
-        <li>{{ killscore.statement }}
-            (Level: {{ killscore.killscore_id }})
-            <a href="/delete/{{ killscore.id }}">Delete</a>
-        </li>
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}</td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
 {% else %}
 <p>You must be an admin to view this page.</p>
-<p>Admin Status: {{ user.admin }}
 {% endif %}
 {% endblock %}

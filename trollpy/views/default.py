@@ -70,17 +70,23 @@ def logout_view(request):
     return HTTPFound(request.route_url('home'), headers=empty_head)
 
 
-@view_config(route_name='profile', renderer='../templates/profile.jinja2', permission="add", require_csrf=True)
+@view_config(route_name='profile', renderer='../templates/profile.jinja2', permission="view", require_csrf=True)
 def profile_view(request):
+    if request.authenticated_userid:
+        user = request.dbsession.query(User).filter_by(
+            username=request.authenticated_userid).first()
+    else:
+        user = None
     theuserid = request.matchdict['userid']
-    the_user = request.dbsession.query(User).filter_by(username=theuserid).first()
+    profile = request.dbsession.query(User).filter_by(username=theuserid).first()
     if request.method == 'POST' and request.POST:
-        the_user.password = pwd_context.hash(request.POST["password"])
-        the_user.first_name = request.POST["first_name"]
-        the_user.last_name = request.POST["last_name"]
-        the_user.email = request.POST["email"]
+        if request.POST["password"] != '':
+            profile.password = pwd_context.hash(request.POST["password"])
+        profile.first_name = request.POST["first_name"]
+        profile.last_name = request.POST["last_name"]
+        profile.email = request.POST["email"]
         return HTTPFound(request.route_url('profile', userid=theuserid))
-    return {"user": the_user}
+    return {"profile": profile, "user": user}
 
 
 @view_config(route_name='add_smack', renderer='../templates/add_smack.jinja2', permission="add", require_csrf=True)
@@ -135,3 +141,18 @@ def make_move(request):
             user.update({'winner': board_winner[1], 'board': board_winner[0]})
         user.update({'board': board_winner[0]})
         return HTTPFound(request.route_url('home'))
+
+
+@view_config(route_name='userlist',
+             permission="add",
+             renderer='../templates/userlist.jinja2',
+             require_csrf=True)
+def user_list(request):
+    """Return a list of all users in the DB."""
+    if request.authenticated_userid:
+        user = request.dbsession.query(User).filter_by(
+            username=request.authenticated_userid).first()
+    else:
+        user = None
+    users = request.dbsession.query(User).all()
+    return {"users": users, "user": user}

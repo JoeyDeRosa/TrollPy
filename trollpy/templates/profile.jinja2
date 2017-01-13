@@ -2,13 +2,17 @@
 {% block body %}
 
 <ul>
-    <li>Username: {{user.username}}</li>
-    <li>Name: {{user.first_name}} {{user.last_name}}</li>
-    <li>Email: <a href="mailto:{{user.email}}">{{user.email}}</a></li>
-    <li>Admin Status: {{ user.admin }}</li>
+    <li>Username: {{profile.username}}</li>
+    <li>Name: {{profile.first_name}} {{profile.last_name}}</li>
+    <li>Email: <a href="mailto:{{profile.email}}">{{profile.email}}</a></li>
+    {% if profile.admin %}
+    <li>Admin Status: {{ profile.admin }}</li>
+    {% endif %}
 </ul>
 
-<input type="button" class="button hollow" id="editprofile" value="Change Profile Settings"/>
+{% if user.username == profile.username %}
+<input type="button" class="button hollow" id="editprofile" value="Edit Profile"/>
+{% endif %}
 
 <form method="POST" id="editform">
     <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
@@ -17,9 +21,8 @@
 <script>
  $(function(){
         $('#editprofile').click(function() {
-            $('#editform').append('<p><label for="password">Password: </label><input type="password" name="password" required/></p><p><label for="first_name">First Name: </label><input type="text" name="first_name" required/></p><p><label for="last_name">Last Name: </label><input type="text" name="last_name" required/></p><p><label for="email">Email: </label><input type="email" name="email" required/></p><input type="submit" class="button hollow" value="Submit"/>');
+            $('#editform').append('<p><label for="password">New Password: </label><input type="password" name="password" /></p><p><label for="first_name">First Name: </label><input type="text" name="first_name" value="{{ profile.first_name }}" required/></p><p><label for="last_name">Last Name: </label><input type="text" name="last_name" value="{{ profile.last_name }}" required/></p><p><label for="email">Email: </label><input type="email" name="email" value="{{ profile.email }}" required/></p><input type="submit" class="button hollow" value="Submit"/>');
         });
     });
 </script>
-
 {% endblock %}
