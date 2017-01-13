@@ -95,18 +95,16 @@ def fill_the_db(testapp):
                     email='amosboldor@gmail.com',
                     admin=True)
         kill_score = KillScore(killscore_id='-8',
-                               statement='You live because I allowed it.')
-        tts = gTTS(text='hello', lang='en')
-        tts.save("hello.mp3")
-        current_place = os.path.dirname(os.path.abspath(__file__))[:-13] + 'hello.mp3'
-        with open(current_place, 'rb') as a:
+                               statement='Prepare to die.')
+        tts = gTTS(text='You live because I allowed it.', lang='en')
+        tts.save('hello.mp3')
+        current_place = os.path.dirname(os.path.abspath(__file__))[:-7]
+        with open(current_place + 'hello.mp3', 'rb') as a:
             data = a.read()
         mp3 = Audio(id=1, binary_file=data)
         dbsession.add(mp3)
         dbsession.add(kill_score)
         dbsession.add(user)
-
-# ======== UNIT TESTS ==========
 
 # ======== FUNCTIONAL TESTS ===========
 
@@ -150,7 +148,7 @@ def test_registration_view_when_logged_in(testapp, fill_the_db):
     csrf = testapp.get('/add_smack').html.find_all("input")
     csrf = csrf[0].attrs['value']
     response = testapp.get('/registration', params={
-            'csrf_token': csrf}, status=302).follow()
+                           'csrf_token': csrf}, status=302).follow()
     assert 'amosboldor@gmail.com' in response.html.find_all('li')[2].text
     assert 'Amos Boldor' in response.html.find_all('li')[1].text
 
@@ -163,7 +161,7 @@ def test_login_view_when_logged_in(testapp, fill_the_db):
     csrf = testapp.get('/add_smack').html.find_all("input")
     csrf = csrf[0].attrs['value']
     response = testapp.get('/login', params={
-            'csrf_token': csrf}, status=302).follow()
+                           'csrf_token': csrf}, status=302).follow()
     assert 'amosboldor@gmail.com' in response.html.find_all('li')[2].text
     assert 'Amos Boldor' in response.html.find_all('li')[1].text
 
@@ -176,6 +174,7 @@ def test_registration_show_form(testapp):
 
 
 def test_profile_when_not_logged_in(testapp, fill_the_db):
+    """Test that profile works when not logged in."""
     assert testapp.get('/profile/amos', status=200)
 
 
@@ -196,9 +195,12 @@ def test_profile_post(testapp, fill_the_db):
                          'password': 'password'}).follow()
     csrf = testapp.get('/add_smack').html.find_all("input")
     csrf = csrf[0].attrs['value']
-    response = testapp.post('/profile/amos', params={'password': 'jdf;a',
-                            'email': 'password@pe.com', 'first_name': 'Jeremy',
-                            'last_name': 'renner', 'csrf_token': csrf}, status=302).follow()
+    response = testapp.post('/profile/amos',
+                            params={'password': 'jdf;a',
+                                    'email': 'password@pe.com',
+                                    'first_name': 'Jeremy',
+                                    'last_name': 'renner',
+                                    'csrf_token': csrf}, status=302).follow()
     assert 'password@pe.com' in response.html.find_all('li')[2].text
     assert 'Jeremy renner' in response.html.find_all('li')[1].text
 
@@ -240,6 +242,7 @@ def test_new_user_with_spaces(testapp):
 
 
 def test_login_user_with_spaces(testapp):
+    """Test that adding a new user via registration page with spaces."""
     user = {
         'username': 'dude mclovin',
         'password': 'password',
@@ -253,6 +256,7 @@ def test_login_user_with_spaces(testapp):
                                     'password': 'password'}).follow()
     assert response.status_code == 200
 
+
 def test_add_smack(testapp, fill_the_db):
     """Test that add_smack route shows form."""
     testapp.post('/login',
@@ -265,7 +269,7 @@ def test_add_smack(testapp, fill_the_db):
 def test_add_smack_with_no_user(testapp, fill_the_db):
     """Test that add_smack route shows 403."""
     assert testapp.get('/add_smack', status=403)
-    
+
 
 def test_add_smack_post(testapp, fill_the_db):
     """Test adding smack to db."""
@@ -276,9 +280,9 @@ def test_add_smack_post(testapp, fill_the_db):
     csrf = testapp.get('/add_smack').html.find_all("input")
     csrf = csrf[0].attrs['value']
     testapp.post('/add_smack', params={
-            'killscore_id': -1,
-            'statement': 'aosidnaosidj',
-            'csrf_token': csrf}, status=302)
+                 'killscore_id': -1,
+                 'statement': 'aosidnaosidj',
+                 'csrf_token': csrf}, status=302)
     assrtion = testapp.get('/smack_api', status=200)
     assert kill_score['statement'] == assrtion.json[-1]['statement']
 
@@ -286,23 +290,23 @@ def test_add_smack_post(testapp, fill_the_db):
 def test_del_smack(testapp, fill_the_db):
     """Delete smack talk route."""
     testapp.post('/login',
-             params={'username': 'amos',
-                     'password': 'password'})
+                 params={'username': 'amos',
+                         'password': 'password'})
     csrf = testapp.get('/add_smack').html.find_all("input")
     csrf = csrf[0].attrs['value']
     testapp.post('/add_smack', params={
-            'killscore_id': -1,
-            'statement': 'aosidnaosidj',
-            'csrf_token': csrf}, status=302)
+                 'killscore_id': -1,
+                 'statement': 'aosidnaosidj',
+                 'csrf_token': csrf}, status=302)
     testapp.get('/delete/1', params={
-               'csrf_token': csrf}, status=302)
+                'csrf_token': csrf}, status=302)
     assrtion = testapp.get('/smack_api', status=200)
     assert assrtion.json[0]['id'] != 1
 
 
 def test_user_board_json(testapp, fill_the_db):
     """Test that get user board gets current chess board."""
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     board = testapp.get('/amos/api', status=200).json['board']
     assert board == 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
@@ -319,11 +323,13 @@ def test_make_move(testapp, fill_the_db):
 def test_user_list(testapp, fill_the_db):
     """Test user list renders users."""
     testapp.post('/login',
-             params={'username': 'amos',
-                     'password': 'password'})
+                 params={'username': 'amos',
+                         'password': 'password'})
     csrf = testapp.get('/add_smack').html.find_all("input")
     csrf = csrf[0].attrs['value']
-    html_user = testapp.get('/userlist', params={'csrf_token': csrf}, status=200).html.find_all('td')
+    html_user = testapp.get('/userlist',
+                            params={'csrf_token': csrf},
+                            status=200).html.find_all('td')
     assert '<td colspan="2"><b>True</b></td>' == str(html_user[1])
 
 
@@ -340,11 +346,13 @@ def test_del_user(testapp, fill_the_db):
     testapp.post('/registration', user, status=302)
     testapp.get('/logout', status=302)
     testapp.post('/login',
-             params={'username': 'amos',
-                     'password': 'password'})
+                 params={'username': 'amos',
+                         'password': 'password'})
     csrf = testapp.get('/add_smack').html.find_all("input")
     csrf = csrf[0].attrs['value']
     testapp.get('/delete_user/2', params={
-               'csrf_token': csrf})
-    html_user = testapp.get('/userlist', params={'csrf_token': csrf}, status=200).html.find_all('td')
+                'csrf_token': csrf})
+    html_user = testapp.get('/userlist',
+                            params={'csrf_token': csrf},
+                            status=200).html.find_all('td')
     assert '<td colspan="2"><b>True</b></td>' == str(html_user[1])
