@@ -8,7 +8,7 @@ from passlib.apps import custom_app_context as pwd_context
 from ..chess_game import users_game
 
 
-@view_config(route_name='home', renderer='../templates/home.jinja2')
+@view_config(route_name='home', renderer='../templates/home.jinja2', require_csrf=False)
 def home_view(request):
     """Render a chessboard with the current FEN."""
     if request.authenticated_userid:
@@ -21,7 +21,7 @@ def home_view(request):
     return {"py_board": fen, "user": user}
 
 
-@view_config(route_name='registration', renderer='../templates/registration.jinja2')
+@view_config(route_name='registration', renderer='../templates/registration.jinja2', require_csrf=False)
 def registration_view(request):
     if request.method == "POST" and request.POST:
         if request.POST["username"] and len(request.POST["username"].split()) > 1:
@@ -43,7 +43,7 @@ def registration_view(request):
     return {"user": None}
 
 
-@view_config(route_name='login', renderer='../templates/login.jinja2')
+@view_config(route_name='login', renderer='../templates/login.jinja2', permission='view', require_csrf=False)
 def login_view(request):
     if request.method == "POST" and request.POST:
         if request.POST["username"] and len(request.POST["username"].split()) > 1:
@@ -56,13 +56,13 @@ def login_view(request):
     return {"user": None}
 
 
-@view_config(route_name='logout')
+@view_config(route_name='logout', require_csrf=False)
 def logout_view(request):
     empty_head = forget(request)
     return HTTPFound(request.route_url('home'), headers=empty_head)
 
 
-@view_config(route_name='profile', renderer='../templates/profile.jinja2')
+@view_config(route_name='profile', renderer='../templates/profile.jinja2', permission="add", require_csrf=True)
 def profile_view(request):
     theuserid = request.matchdict['userid']
     the_user = request.dbsession.query(User).filter_by(username=theuserid).first()
@@ -75,7 +75,7 @@ def profile_view(request):
     return {"user": the_user}
 
 
-@view_config(route_name='add_smack', renderer='../templates/add_smack.jinja2')
+@view_config(route_name='add_smack', renderer='../templates/add_smack.jinja2', permission="add", require_csrf=True)
 def add_smack(request):
     """Add smack talk to the DB."""
     if request.authenticated_userid:
@@ -94,7 +94,7 @@ def add_smack(request):
     return {"user": user, "killscore": killscore}
 
 
-@view_config(route_name='del_smack')
+@view_config(route_name='del_smack', permission="view", require_csrf=False)
 def del_smack(request):
     smack_id = request.matchdict['id']
     item_to_delete = request.dbsession.query(KillScore).get(smack_id)
@@ -102,21 +102,21 @@ def del_smack(request):
     return HTTPFound(request.route_url('add_smack'))
 
 
-@view_config(route_name='api_smack', renderer='json')
+@view_config(route_name='api_smack', renderer='json', permission="view", require_csrf=False)
 def smack_json(request):
     smack_dict = request.dbsession.query(KillScore).all()
     output = [item.to_json() for item in smack_dict]
     return output
 
 
-@view_config(route_name='api_user', renderer='json')
+@view_config(route_name='api_user', renderer='json', permission="view",require_csrf=False)
 def user_board_json(request):
     theuserid = request.matchdict['userid']
     user = request.dbsession.query(User).filter_by(username=theuserid)
     return user.first().to_json()
 
 
-@view_config(route_name='make_move')
+@view_config(route_name='make_move', permission="view", require_csrf=False)
 def make_move(request):
     if request.method == "POST" and request.POST:
         theuserid = request.matchdict['userid']
