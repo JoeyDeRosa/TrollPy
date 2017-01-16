@@ -1,0 +1,21 @@
+{% extends "layout.jinja2" %}
+{% block title %}Log In{% endblock %}
+
+{% block body %}
+
+    <form method="POST">
+        <p>
+            <label for="username">Username: </label>
+            <input type="text" name="username"/>
+        </p>
+        <p>
+            <label for="password">Password: </label>
+            <input type="password" name="password"/>
+        </p>
+        <input type="submit" value="Log In"/>
+    </form>
+
+<p>Need to <a href="{{ request.route_url('registration') }}">register</a> an account?
+
+
+{% endblock %}

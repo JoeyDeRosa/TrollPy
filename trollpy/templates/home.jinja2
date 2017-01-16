@@ -1,0 +1,170 @@
+{% extends "layout.jinja2" %}
+{% block body %}
+
+<div class="row">
+  <div id="board" class="small-11 columns">
+  </div>
+</div>
+
+<script>
+function reloadChat(trollspeak) {
+    $(function(){
+        $("#chatbox").typed({
+            strings: [trollspeak],
+            typeSpeed: 0,
+            showCursor: false,
+        });
+    });
+}
+
+reloadChat('{{ user.trollspeak }}');
+</script>
+
+<div class="row">
+    <div id="chatbox" class="small-12 columns card-section">
+    </div>
+    <div class="small-12 columns">
+        {% if not request.authenticated_userid %}   
+        Please <a href="{{ request.route_url('login') }}">log in</a>...
+        {% else %}        
+        <input type="button" class="button hollow" id="startPositionBtn" value="Give Up" />
+        {% endif %}
+    </div>
+</div>
+
+<script>
+var audio = new Audio();
+audio.controls = false;
+var game = new Chess('{{ py_board }}');
+
+var removeGreySquares = function() {
+    $('#board .square-55d63').css('background', '');
+};
+
+var greySquare = function(square) {
+    var squareEl = $('#board .square-' + square);
+
+    var background = '#a9a9a9';
+    if (squareEl.hasClass('black-3c85d') === true) {
+        background = '#696969';
+    }
+
+    squareEl.css('background', background);
+};
+
+var onDragStart = function(source, piece) {
+    // do not pick up pieces if the game is over
+    // or if it's not that side's turn
+    if (game.game_over() === true ||
+        (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+        (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+        return false;
+    }
+};
+
+var onDrop = function(source, target) {
+    removeGreySquares();
+
+    // see if the move is legal
+    var move = game.move({
+        from: source,
+        to: target,
+        promotion: 'q' // NOTE: always promote to a queen
+    });
+
+    // illegal move
+    if (move === null) return 'snapback';
+};
+
+var onMouseoverSquare = function(square, piece) {
+    // get list of possible moves for this square
+    var moves = game.moves({
+        square: square,
+        verbose: true
+    });
+
+    // exit if there are no moves available for this square
+    if (moves.length === 0) return;
+
+    // highlight the square they moused over
+    greySquare(square);
+
+    // highlight the possible squares for this piece
+    for (var i = 0; i < moves.length; i++) {
+        greySquare(moves[i].to);
+    }
+};
+
+var onMouseoutSquare = function(square, piece) {
+    removeGreySquares();
+};
+
+var onSnapEnd = function() {
+    board.position(game.fen());
+    if (game.in_checkmate()) {
+        reloadChat('You Win')
+    } else if (game.in_draw()) {
+        reloadChat('Game In Draw')
+    }
+    $.ajax({
+        type: 'POST',
+        url: '/{{ request.authenticated_userid }}/move',
+        data: {
+            board: window.game.fen()
+        },
+        success: function() {
+            get_board('{{ request.authenticated_userid }}')
+        }
+    });
+}
+
+function get_board(user) {
+    user_response = $.ajax({
+        dataType: "json",
+        url: user + '/api',
+        success: function() {
+            stuff = user_response.responseJSON;
+            trollspeak = stuff.trollspeak;
+            game = new Chess(stuff.board);
+            render_board(stuff.board)
+            if (game.in_checkmate()) {
+                reloadChat('You lose')
+            } else if (game.in_check()) {
+                reloadChat('You in check foo')
+            } else if (game.in_draw()) {
+                reloadChat('Game In Draw')
+            } else {
+                reloadChat(trollspeak);
+                audio.src = "{{ request.route_url('home') }}mp3/" + stuff.id;
+                audio.play()
+            }
+        }
+    });
+}
+
+function render_board(fen) {
+    var cfg = {
+        position: fen,
+        draggable: true,
+        moveSpeed: 350,
+        onDragStart: onDragStart,
+        onDrop: onDrop,
+        onSnapEnd: onSnapEnd,
+        dropOffBoard: 'snapback',
+        onMouseoutSquare: onMouseoutSquare,
+        onMouseoverSquare: onMouseoverSquare,
+        sparePieces: false
+    };
+
+    board = ChessBoard('board', cfg);
+    $(window).resize(board.resize);
+    $('#startPositionBtn').click(function() {
+        game.reset();
+        board.start();
+    });
+}
+
+render_board('{{ py_board }}')
+</script>
+
+{% endblock %}

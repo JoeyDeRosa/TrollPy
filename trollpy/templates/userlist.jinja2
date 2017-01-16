@@ -1,0 +1,37 @@
+{% extends "layout.jinja2" %}
+{% block body %}
+{% if user.admin %}
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
+ 
+    </form>
+    <table>
+    <th>Username</th>
+    <th colspan="2">Admin?</th>
+    {% for user in users %}
+        {% if user.admin == True %}
+        <tr>
+        <td><b><a href="/profile/{{ user.username }}">
+            {{ user.username }}
+            </a></b></td>
+        <td colspan="2"><b>{{ user.admin }}</b></td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+    {% for user in users %}
+        {% if user.admin == False %}
+        <tr>
+        <td><a href="/profile/{{ user.username }}">{{ user.username }}</a></td>
+        <td>{{ user.admin }}</td>
+        <td><a href="/delete_user/{{ user.id }}">Delete</a></td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+    </table>
+
+{# <p>Register a <a href="{{ request.route_url('registration') }}">new account</a>.
+ #}
+{% else %}
+<p>You must be an admin to view this page.</p>
+{% endif %}
+{% endblock %}

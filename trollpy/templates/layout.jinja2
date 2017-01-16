@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Chess{% endblock %} - TrollPy</title>
+    <link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/foundation.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="stylesheet" href="/static/css/chessboard.css">
+    <link rel="stylesheet" href="/static/css/typewriter.css">
+    <script src="/static/js/chessboard.js"></script>
+    <script src="/static/js/vendor/jquery.js"></script>
+    <script src="/static/js/vendor/typed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
+</head>
+
+<body>
+
+    <div class="row">
+        <div class="medium-6 columns card-section">
+            {% block body %}{% endblock %}
+        </div>
+        <nav class="medium-6 columns card-section">
+            <h1>TrollPy Chess</h1>
+            <ul>
+                <li>
+                    <a href="{{ request.route_url('home') }}">Play</a>
+                </li>
+                {% if request.authenticated_userid %}
+                <li>
+                    Logged in as <a href="{{ request.route_url('profile', userid=request.authenticated_userid) }}">{{ request.authenticated_userid }}</a>
+                </li>
+                <li>
+                    <a href="{{ request.route_url('logout') }}">Log Out</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{{ request.route_url('login') }}">Log In</a>
+                </li>
+                {% endif %}
+                </ul>
+                {% if user.admin %}
+                <ul><b><u>Admin Stuff</u></b>
+                <li>
+                    <a href="{{ request.route_url('add_smack') }}">Edit Smack DB</a>
+                </li>
+                <li>
+                    <a href="{{ request.route_url('userlist') }}">User List</a>
+                </li>
+                </ul>
+                {% endif %}
+        </nav>
+    </div>
+
+    <footer class="footer card-section">
+        &copy; <script>document.write(new Date().getFullYear())</script> TrollPy
+    </footer>
+
+
+    <script src="/static/js/vendor/what-input.js"></script>
+    <script src="/static/js/vendor/foundation.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

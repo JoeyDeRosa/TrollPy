@@ -1,0 +1,131 @@
+    1  ls
+    2  cd Desktop/
+    3  ld
+    4  ''ls
+    5  cd alexa-avs-sample-app/
+    6  samples/javaclient && mvn exec:exec
+    7  cd samples/
+    8  javaclient && mvn exec:exec
+    9  samples/javaclient && mvn exec:exec
+   10  cd ..
+   11  samples/javaclient && mvn exec:exec
+   12  cd samples/
+   13  cd javaclient && mvn exec:exec
+   14  && mvn exec:exec
+   15  cd ..
+   16  javaclient && mvn exec:exec
+   17  cd ..
+   18  cd samples/javaclient && mvn exec:exec
+   19  cd Desktop
+   20  git clone https://github.com/alexa/alexa-avs-sample-app.git
+   21  ls
+   22  cd alexa-avs-sample-app/
+   23  nano automated_install.sh
+   24  ls
+   25  chmod +x automated_install.sh
+   26  . automated_install.sh
+   27  ls
+   28  cd companionService && npm start
+   29  cd ..
+   30  cd companionService && npm start
+   31  ls
+   32  cd Desktop/
+   33  ls
+   34  alexa-avs-sample-app/
+   35  cd alexa-avs-sample-app/
+   36  ls
+   37  cd samples/
+   38  ls
+   39  cd wakeWordAgent && app
+   40  ls
+   41  sudo apt-get update
+   42  sudo raspi-config
+   43  sudo apt-get install tightvncserver
+   44  sudo raspi-config
+   45  nano automated_install.sh
+   46  cd ~/Desktop/alexa-avs-sample-app
+   47  nano automated_install.sh
+   48  cd ~/Desktop/alexa-avs-sample-app
+   49  cd ~/Desktop/alexa-avs-sample-app/samples/companionService && npm start
+   50  cd ~/Desktop/alexa-avs-sample-app/samples/javaclient && mvn exec:exec
+   51  cd ~/Desktop/alexa-avs-sample-app
+   52  nano automated_install.sh
+   53  cd ~/Desktop/alexa-avs-sample-app
+   54  chmod +x automated_install.sh
+   55  . automated_install.sh
+   56  cd ~/Desktop/alexa-avs-sample-app/samples/wakeWordAgent/src
+   57  sudo ./wakeWordAgent -e gpio
+   58  cd ~/Desktop/alexa-avs-sample-app/samples/companionService && npm start
+   59  ls
+   60  cd ~/Desktop/alexa-avs-sample-app/samples
+   61  cd wakeWordAgent/src && ./wakeWordAgent -e kitt_ai
+   62  cd javaclient && mvn exec:exec
+   63  cd companionService && npm start
+   64  cd ~/Desktop/alexa-avs-sample-app/samples
+   65  cd companionService && npm
+   66  cd ..
+   67  cd companionService && npm
+   68  cd
+   69  cd ~/Desktop/alexa-avs-sample-app
+   70  cd samples
+   71  cd companionService && npm start
+   72  cd ~/Desktop/alexa-avs-sample-app/samples
+   73  cd javaclient && mvn exec:exec
+   74  cd ~/Desktop/alexa-avs-sample-app/samples
+   75  cd companionService && npm start
+   76  cd ~/Desktop/alexa-avs-sample-app/samples
+   77  cd javaclient && mvn exec:exec
+   78  cd ~/Desktop/alexa-avs-sample-app/samples
+   79  cd javaclient && mvn exec:exec
+   80  cd D
+   81  cd Desktop
+   82  ls
+   83  cd
+   84  cd ~/Desktop/alexa-avs-sample-app
+   85  . automated_install.sh
+   86  pserve.ini
+   87  ls
+   88  cd 
+   89  cd ~/Desktop/alexa-avs-sample-app/samples
+   90  cd companionService && npm start
+   91  ls
+   92  cd Desktop/
+   93  ls
+   94  cd alexa-avs-sample-app/
+   95  ls
+   96  cd
+   97  cd ~/Desktop/alexa-avs-sample-app/samples
+   98  cd companionService && npm start
+   99  cd ~/Desktop/alexa-avs-sample-app
+  100  cd companionService && npm start
+  101  ls
+  102  cd
+  103  cd ~/Desktop/alexa-avs-sample-app/samples
+  104  cd companionService && npm start
+  105  cd ~/Desktop/alexa-avs-sample-app/samples
+  106  cd javaclient && mvn exec:exec
+  107  cd
+  108  cd ~/Desktop/alexa-avs-sample-app/samples
+  109  cd javaclient && mvn exec:exec
+  110  which git
+  111  echo history >> commit.txt
+  112  ls
+  113  less commit.txt
+  114  history
+
+
+var app = require('../app');
+var debug = require('debug')('companion:server');
+var https = require('https');
+var fs = require('fs');
+var config = require("../config");
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+var options = {
+    key: fs.readFileSync(config.sslKey),
+    cert: fs.readFileSync(config.sslCert),
+    ca: fs.readFileSync(config.sslCaCert),
+    requestCert: true,
+    rejectUnauthorized: false,

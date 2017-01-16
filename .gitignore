@@ -1,3 +1,5 @@
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -23,6 +25,17 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+bin/
+lib64
+pip-selfcheck.json
+pyvenv.cfg
+share/
+/env
+/env2
+env/
+env2/
+*.mp3
+
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -87,3 +100,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Miscellaneous
+*.sqlite

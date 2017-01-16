@@ -1,0 +1,228 @@
+{% extends "layout.jinja2" %}
+{% block body %}
+{% if user.admin %}
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}"/>
+        <p>
+            <label for="statement">Trollpy will say this: </label>
+            <input type="text" name="statement"/>
+        </p>
+        <p>
+            <label for="killscore_id">Level of Severity: (-8 is the sickest of burns, 8 is meh) </label>
+            <input type="number" name="killscore_id" min="-8" max="8">
+        </p>
+        <input type="submit" value="submit" class="button hollow" />
+    </form>
+    <ul>
+    <table>
+
+    <th>Level</th><th colspan="2">Phrase</th>
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == 8 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == 7 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == 6 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == 5 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == 4 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == 3 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == 2 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == 1 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == 0 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == -1 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == -2 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == -3 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == -4 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == -5 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == -6 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == -7 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    {# --------------------------------------------------------------------- #}
+    {% for killscore in killscore %}
+    {% if killscore.killscore_id == -8 %}
+    <tr>
+        <td>{{ killscore.killscore_id }}</td>
+        <td>{{ killscore.statement }}
+        <a href="/mp3/{{ killscore.id }}"> 🔊 </a></td>
+        <td><a href="/delete/{{ killscore.id }}">Delete</a></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+
+    </table>
+{% else %}
+<p>You must be an admin to view this page.</p>
+{% endif %}
+{% endblock %}
